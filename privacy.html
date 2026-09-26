@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Политика конфиденциальности — SCU</title>
+    <meta name="description" content="Какую информацию обрабатывает сайт SCU: подсчёт уникальных посетителей и загрузок без cookies, аналитики и рекламы.">
+    <link rel="icon" type="image/png" href="static/compositor/app-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; background: #fff; color: #000; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: inherit; text-decoration: none; }
+        :focus-visible { outline: 2px solid #0255fc; outline-offset: 2px; }
+
+        .top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px 46px 0;
+            font-size: 16px;
+            line-height: 20px;
+        }
+        .top .back { color: #444444; transition: color .15s ease; }
+        .top .back:hover { color: #0255fc; }
+
+        .page {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 70px 25px 90px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 40px;
+            line-height: 46px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #444444;
+        }
+        .updated { margin: 12px 0 0; font-size: 13px; line-height: 18px; color: #8a8a8a; }
+        h2 {
+            margin: 44px 0 10px;
+            font-size: 20px;
+            line-height: 26px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: #444444;
+        }
+        p, li { font-size: 15px; line-height: 23px; color: #5a5a5a; }
+        ul { margin: 8px 0; padding-left: 20px; }
+        li { margin-bottom: 7px; }
+        code {
+            font-size: 13px;
+            background: #f2f2f2;
+            padding: 1px 5px;
+            border-radius: 4px;
+        }
+        a.inline { color: #0255fc; }
+        a.inline:hover { text-decoration: underline; }
+
+        .legal {
+            margin: 0;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 16px;
+            color: #b5b5b5;
+            border-top: 1px dotted #eeeeee;
+        }
+
+        @media (max-width: 768px) {
+            .top { padding: 20px 20px 0; }
+            .page { padding: 46px 22px 70px; }
+            h1 { font-size: 30px; line-height: 36px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top">
+        <a class="back" href="/">← На главную</a>
+        <span style="font-weight: 600; color: #444444;">SCU</span>
+    </div>
+
+    <div class="page">
+        <h1>Политика конфиденциальности</h1>
+        <p class="updated">Обновлено: 27.09.26</p>
+
+        <p>Эта политика честно описывает, что происходит с данными, когда вы открываете сайт SCU и пользуетесь им. Коротко: сайт не знает о вас почти ничего, и это не преувеличение.</p>
+
+        <h2>Что собирается</h2>
+        <p>При открытии страницы и при нажатии кнопки «Скачать» сервер получает технические данные вашего запроса: IP-адрес и строку User-Agent (их передаёт любой браузер при любом запросе к любому сайту). Дальше происходит следующее:</p>
+        <ul>
+            <li>из IP-адреса и User-Agent вычисляется односторонний хеш <code>SHA256(соль + IP + User-Agent)</code>;</li>
+            <li>сохраняется только этот хеш и время создания — в виде маркера в хранилище Vercel Blob;</li>
+            <li>сырой IP-адрес и User-Agent <strong>нигде не записываются</strong> — ни в логи сайта, ни в базу, ни куда-либо ещё.</li>
+        </ul>
+        <p>Хеш нужен ровно для одного: посчитать уникальных посетителей и уникальные загрузки, чтобы в шапке сайта отображались счётчики. Один и тот же пользователь добавляет в счётчик ровно единицу, сколько бы раз он ни заходил.</p>
+
+        <h2>Что НЕ собирается</h2>
+        <ul>
+            <li>Никаких cookies, localStorage, sessionStorage.</li>
+            <li>Никакой аналитики (Google Analytics, Яндекс.Метрика и подобные не подключены).</li>
+            <li>Никакой рекламы и трекинговых пикселей.</li>
+            <li>Никаких имён, почт, телефонов, аккаунтов и форм ввода — на сайте нет ни одной формы.</li>
+            <li>Никакой информации о вашей системе, экране, локации или поведении.</li>
+        </ul>
+
+        <h2>Можно ли по хешу вас опознать</h2>
+        <p>Нет. Хеш необратим: из него нельзя восстановить IP-адрес или User-Agent. Теоретически хеш можно «перебрать», если перебрать все возможные комбинации IP и User-Agent, но это непрактично, а соль хеширования известна только серверу. Связать маркер в хранилище с конкретным человеком сайт не может — этим занимается не политика, а математика.</p>
+
+        <h2>Сторонние сервисы</h2>
+        <ul>
+            <li><strong>Vercel Inc.</strong> — хостинг сайта и API. При любом обращении к сайту Vercel технически обрабатывает ваш запрос (IP, время, URL) согласно <a class="inline" href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">своей политике конфиденциальности</a>. Управлять этим сайт не может.</li>
+            <li><strong>Google Fonts</strong> — шрифты загружаются с серверов Google, поэтому Google видит ваши запросы к ним (IP-адрес). Это стандартная механика подключения веб-шрифтов.</li>
+            <li><strong>GitHub</strong> — по кнопкам «Скачать» и «Исходный код» вы переходите на github.com. GitHub получает данные вашего визита согласно своей политике; сайт при этом фиксирует только факт нажатия «Скачать» (см. раздел «Что собирается»).</li>
+            <li><strong>Ozon Банк</strong> — ссылка поддержки ведёт на страницу оплаты Ozon. Всё, что вы вводите там, обрабатывается Ozon Банком по его правилам; сайт этих данных не видит и не получает.</li>
+        </ul>
+
+        <h2>Срок хранения</h2>
+        <p>Маркеры-хеши хранятся бессрочно — они и есть накопленные счётчики. Удаление отдельных маркеров технически невозможно, потому что по хешу нельзя определить, чей он именно. Если вы принципиально не хотите участвовать в подсчёте — блокируйте запросы к <code>/api/track</code> любым блокировщиком (uBlock Origin и аналоги), счётчик не пострадает, а вы не будете учтены.</p>
+
+        <h2>Данные приложения</h2>
+        <p>Само приложение SCU — отдельная программа, работающая локально на вашем компьютере. Настоящая политика описывает только сайт. Что делает с данными установленное приложение, описано в его документации и исходном коде: <a class="inline" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener">github.com/endlessbum/SCU</a>.</p>
+
+        <h2>Изменения политики</h2>
+        <p>Если порядок обработки данных изменится, дата «Обновлено» вверху страницы изменится вместе с текстом. Существенных причин менять что-либо нет: собирать больше, чем описано выше, здесь не планируется.</p>
+
+        <h2>Контакты</h2>
+        <p>Вопросы по этой политике — через <a class="inline" href="https://github.com/endlessbum/SCU/issues" target="_blank" rel="noopener">issues репозитория проекта</a>.</p>
+    </div>
+
+    <p class="legal">SCU не связан с другими компаниями и не одобрен ни одной из них.</p>
+
+</body>
+</html>
