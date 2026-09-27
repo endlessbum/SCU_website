@@ -219,9 +219,6 @@
             margin: 50px 0 0;
             padding: 0;
             max-width: 420px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
         }
         .features li {
             display: flex;
@@ -229,16 +226,15 @@
             height: 42px;
             padding-left: 11px;
             font-size: 14px;
-            border-radius: 6px;
+            border-bottom: 1px solid #e2e2e2;
         }
+        .features li:last-child { border-bottom: 0; }
         .features .group {
-            background: #2B2B2B;
-            color: #fff;
+            color: #2B2B2B;
             font-weight: 600;
         }
         .features .sub {
-            background: #202020;
-            color: rgba(255, 255, 255, .82);
+            color: #202020;
             padding-left: 27px;
         }
 
@@ -481,7 +477,6 @@
             .features { margin-top: 40px; max-width: none; }
             .features li { height: 44px; font-size: 14px; padding-left: 8px; }
             .features .sub { padding-left: 23px; }
-
             .footer { flex-direction: column; padding: 60px 25px 80px; }
             .footer-brand { flex-direction: column; gap: 14px; }
             .footer-brand img { width: 81px; height: 81px; }
