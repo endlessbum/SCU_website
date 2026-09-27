@@ -124,6 +124,10 @@
         .btn-download { width: 200px; background: #444444; color: #fff; }
         .btn-download img { margin-top: -2px; }
 
+        .vt-badge { display: inline-block; margin-top: 14px; transition: transform .15s ease, opacity .15s ease; }
+        .vt-badge:hover { transform: scale(1.04); }
+        .vt-badge img { display: block; }
+
         /* Hover: black fill changes to the app icon color */
         .btn-download { transition: transform .15s ease, opacity .15s ease, background-color .15s ease; }
         .btn-download:hover { background-color: #0255fc; }
@@ -392,6 +396,7 @@
 
             .hero { padding-top: 60px; display: flex; flex-direction: column; padding-bottom: 20px; }
             .hero .buttons { order: 3; }
+            .hero .vt-badge { order: 4; margin-top: 12px; }
             .hero h1 { font-size: calc((100vw - 50px) / 8.75); line-height: 1.02; }
             .hero .sub { margin-top: 14px; font-size: 17.5px; line-height: 22px; }
 
@@ -493,6 +498,10 @@
             <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v2.1.1/SCU_Setup_2.1.1.0.exe"><img src="static/compositor/windows-logo.svg" alt="">Скачать</a>
             <a class="btn btn-source" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="static/compositor/github-logo.svg" alt="">Исходный код</a>
         </div>
+
+        <a class="vt-badge" href="https://www.virustotal.com/gui/url/333ded8049c8a1599af1b3981d68845ab1bd8ea9a92f3c93f2d6d3af8a0e9aa6" target="_blank" rel="noopener" aria-label="Результат сканирования на VirusTotal: 0 из 92">
+            <img src="static/compositor/virustotal-badge.svg" width="144" height="28" alt="Проверено VirusTotal: 0/92">
+        </a>
 
         <div class="hero-image">
             <img src="static/compositor/hero.webp" width="2936" height="1443" fetchpriority="high" alt="Интерфейс приложения SCU">

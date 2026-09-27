@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="28" viewBox="0 0 144 28" role="img" aria-label="Проверено VirusTotal: 0 из 92">
+  <title>Проверено VirusTotal: 0 из 92</title>
+  <defs>
+    <clipPath id="r"><rect width="144" height="28" rx="6"/></clipPath>
+  </defs>
+  <g clip-path="url(#r)">
+    <rect width="78" height="28" fill="#444444"/>
+    <rect x="78" width="66" height="28" fill="#0b4dda"/>
+  </g>
+  <text x="39" y="18.5" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#ffffff">проверено</text>
+  <g transform="translate(86,7.5) scale(0.1461)">
+    <path fill="#ffffff" fill-rule="evenodd" d="M45.292 44.5 0 89h100V0H0l45.292 44.5zM90 80H22l35.987-35.2L22 9h68v71z"/>
+  </g>
+  <text x="121.5" y="18.5" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#ffffff">0/92</text>
+</svg>
