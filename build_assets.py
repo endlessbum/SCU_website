@@ -70,4 +70,11 @@ rgb.save(os.path.join(ROOT, 'static', 'compositor', 'hero.webp'),
 # --- 3. og:image 1200x630 — cover-кроп из hero ---
 ImageOps.fit(rgb, (1200, 630), Image.LANCZOS).save(
     os.path.join(ROOT, 'static', 'compositor', 'og-image.png'), optimize=True)
+
+# --- 4. Курсор-шестерёнка: плоский #1C60F6, альфа логотипа, без контура ---
+icon = Image.open(os.path.join(ROOT, 'static', 'compositor', 'app-icon.png')).convert('RGBA')
+gear = Image.new('RGBA', icon.size, (0x1C, 0x60, 0xF6, 0))
+gear.putalpha(icon.split()[3])
+gear.resize((28, 28), Image.LANCZOS).save(
+    os.path.join(ROOT, 'static', 'compositor', 'cursor.png'))
 print('done')
