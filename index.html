@@ -219,6 +219,9 @@
             margin: 50px 0 0;
             padding: 0;
             max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
         }
         .features li {
             display: flex;
@@ -226,11 +229,18 @@
             height: 42px;
             padding-left: 11px;
             font-size: 14px;
-            color: #333;
-            background: transparent;
-            border-bottom: 1px solid #e2e2e2;
+            border-radius: 6px;
         }
-        .features li:last-child { border-bottom: 0; }
+        .features .group {
+            background: #2B2B2B;
+            color: #fff;
+            font-weight: 600;
+        }
+        .features .sub {
+            background: #202020;
+            color: rgba(255, 255, 255, .82);
+            padding-left: 27px;
+        }
 
         /* ---------- FOOTER ---------- */
         .footer {
@@ -470,6 +480,7 @@
             .cards img:last-child { width: calc(38% - 12px); }
             .features { margin-top: 40px; max-width: none; }
             .features li { height: 44px; font-size: 14px; padding-left: 8px; }
+            .features .sub { padding-left: 23px; }
 
             .footer { flex-direction: column; padding: 60px 25px 80px; }
             .footer-brand { flex-direction: column; gap: 14px; }
@@ -585,27 +596,39 @@
             </div>
 
             <ul class="features">
-                <li>Главная</li>
-                <li>Бэнчмарк</li>
-                <li>Информация о системе</li>
-                <li>Установка компонентов</li>
-                <li>Очистка системы и диска</li>
-                <li>Удаление мусорного ПО</li>
-                <li>Приватность и телеметрия</li>
-                <li>Службы Windows</li>
-                <li>Приложения</li>
-                <li>Автозагрузка</li>
-                <li>Питание, память, CPU</li>
-                <li>Сеть</li>
-                <li>Интерфейс и проводник</li>
-                <li>Ввод, браузер и игры</li>
-                <li>Поиск и целостность</li>
-                <li>Безопасность (UAC)</li>
-                <li>Сканер</li>
-                <li>Задачи планировщика</li>
-                <li>Обновления Windows</li>
-                <li>История</li>
-                <li>Настройки</li>
+                <li class="group">Обзор</li>
+                <li class="sub">Главная</li>
+                <li class="sub">Бэнчмарк</li>
+                <li class="sub">Информация о системе</li>
+
+                <li class="group">Очистка и обслуживание</li>
+                <li class="sub">Очистка системы и диска</li>
+                <li class="sub">Удаление мусорного ПО</li>
+                <li class="sub">Поиск и целостность</li>
+                <li class="sub">Установка компонентов</li>
+
+                <li class="group">Приватность и защита</li>
+                <li class="sub">Приватность и телеметрия</li>
+                <li class="sub">Безопасность UAC</li>
+                <li class="sub">Сканер</li>
+
+                <li class="group">Система Windows</li>
+                <li class="sub">Службы Windows</li>
+                <li class="sub">Приложения</li>
+                <li class="sub">Автозагрузка</li>
+                <li class="sub">Задачи планировщика</li>
+                <li class="sub">Обновления Windows</li>
+
+                <li class="group">Поведение и производительность</li>
+                <li class="sub">Питание, память и CPU</li>
+                <li class="sub">Сеть</li>
+                <li class="sub">Интерфейс и проводник</li>
+                <li class="sub">Ввод, браузер и игры</li>
+
+                <li class="group">Приложение</li>
+                <li class="sub">Браузер</li>
+                <li class="sub">История</li>
+                <li class="sub">Настройки</li>
             </ul>
         </div>
     </section>
