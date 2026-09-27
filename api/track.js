@@ -12,7 +12,7 @@
 // TRACK_SALT — необязательная соль; после её смены счётчики начнутся
 // заново (старые маркеры останутся в сторадже).
 const crypto = require('crypto');
-const { head, put, list } = require('@vercel/blob');
+const { head, put, list, BlobNotFoundError } = require('@vercel/blob');
 
 const PREFIX_VISIT = 'scu-stats/visits/';
 const PREFIX_DOWNLOAD = 'scu-stats/downloads/';
@@ -37,7 +37,10 @@ async function markUser(prefix, hash) {
         await head(path);
         return false; // уже считали этого пользователя
     } catch (e) {
-        // маркера нет — создаём; повторная запись того же пути идемпотентна
+        // создаём маркер только когда его действительно нет; сетевые ошибки
+        // и проблемы доступа к стораджу пробрасываем наверх (ответ 500),
+        // иначе сбой head() засчитал бы пользователя повторной записью
+        if (!(e instanceof BlobNotFoundError)) throw e;
     }
     await put(path, String(Date.now()), { access: 'private', addRandomSuffix: false });
     return true;
@@ -77,6 +80,12 @@ async function counts(force) {
 module.exports = async (req, res) => {
     try {
         const type = req.query.type === 'download' ? 'download' : 'visit';
+        // type=download принимается только POST: GET-префетчи браузера
+        // (например, при наведении на ссылку) не должны накручивать счётчик
+        if (type === 'download' && req.method !== 'POST') {
+            res.status(405).json({ error: 'method_not_allowed' });
+            return;
+        }
         const hash = userHash(req);
         const created = await markUser(type === 'visit' ? PREFIX_VISIT : PREFIX_DOWNLOAD, hash);
 

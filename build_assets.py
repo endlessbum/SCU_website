@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Сборка ассетов сайта: скрины, карточки и hero-коллаж."""
+"""Сборка ассетов сайта: скрины карусели и hero-коллаж."""
 import os
 import shutil
 from PIL import Image, ImageFilter
@@ -22,8 +22,6 @@ round_files = {fix_name(f): os.path.join(ROUND, f)
                for f in os.listdir(ROUND) if f.lower().endswith('.png')}
 straight_files = {f: os.path.join(STRAIGHT, f)
                   for f in os.listdir(STRAIGHT) if f.lower().endswith('.png')}
-
-print('rounded keys:', sorted(round_files))
 
 # --- 1. Скрины для карусели (прямые углы), имена прежние ---
 for src_name, dst_name in [

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница не найдена — SCU</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/compositor/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/compositor/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root { color-scheme: light dark; }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            padding: 40px 25px;
+            text-align: center;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background: #fff;
+            color: #000;
+        }
+        @media (prefers-color-scheme: dark) {
+            body { background: #111111; color: #f5f5f5; }
+        }
+
+        .logo { width: 88px; height: 88px; }
+
+        .code {
+            margin: 34px 0 0;
+            font-size: 96px;
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: #444444;
+        }
+        .title {
+            margin: 14px 0 0;
+            font-size: 24px;
+            line-height: 30px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: #444444;
+        }
+        .hint {
+            margin: 12px 0 0;
+            max-width: 420px;
+            font-size: 15px;
+            line-height: 22px;
+            color: #767676;
+        }
+
+        .actions { margin-top: 40px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            height: 50px;
+            padding: 0 24px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+        }
+        .btn-home { background: #444444; color: #fff; }
+        .btn-home:hover { background: #0255fc; }
+        .btn-github { background: transparent; color: #363636; border: 1.5px solid #dcdcdc; }
+        .btn-github:hover { background: #0255fc; border-color: #0255fc; color: #fff; }
+        .btn-github img { width: 18px; height: 18px; }
+
+        @media (prefers-color-scheme: dark) {
+            .code, .title { color: #f5f5f5; }
+            .hint { color: #8f8f8f; }
+            .btn-home { background: #f5f5f5; color: #111111; }
+            .btn-home:hover { background: #0255fc; color: #fff; }
+            .btn-github { color: #e0e0e0; border-color: #3a3a3a; }
+            .btn-github:hover { background: #0255fc; border-color: #0255fc; color: #fff; }
+            /* иконка залита #363636 — на тёмной теме инвертируем в светлую */
+            .btn-github img { filter: invert(1); }
+        }
+
+        @media (max-width: 768px) {
+            .logo { width: 72px; height: 72px; }
+            .code { font-size: 72px; }
+            .title { font-size: 20px; line-height: 26px; }
+        }
+    </style>
+</head>
+<body>
+    <img class="logo" src="/static/compositor/app-icon.png" alt="Логотип SCU">
+    <p class="code">404</p>
+    <h1 class="title">Страница не найдена</h1>
+    <p class="hint">Такой страницы нет — возможно, она переехала или в адресе опечатка.</p>
+    <div class="actions">
+        <a class="btn btn-home" href="/">На главную</a>
+        <a class="btn btn-github" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="/static/compositor/github-logo.svg" alt="">GitHub</a>
+    </div>
+</body>
+</html>

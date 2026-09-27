@@ -1,4 +1,11 @@
 {
+    "redirects": [
+        {
+            "source": "/download",
+            "destination": "https://github.com/endlessbum/SCU/releases/download/v2.1.1/SCU_Setup_2.1.1.0.exe",
+            "permanent": false
+        }
+    ],
     "headers": [
         {
             "source": "/(.*)",
