@@ -4,10 +4,12 @@ import os
 import shutil
 from PIL import Image, ImageFilter
 
-ROOT = r'E:\Серый\Проекты\SCU\Сайт'
+ROOT = os.path.dirname(os.path.abspath(__file__))
 ROUND = os.path.join(ROOT, 'Скрины', 'Срины приложения с сглаженными углами')
 STRAIGHT = os.path.join(ROOT, 'Скрины', 'Срины приложения с углами 90 градусов')
 SCU = os.path.join(ROOT, 'static', 'scuapp')
+# Диалог с рабочего стола — путь можно переопределить: UAC_IMAGE=... python build_assets.py
+UAC_IMAGE = os.environ.get('UAC_IMAGE', r'C:\Users\benq\Desktop\Окно UAC.png')
 
 
 def fix_name(n):
@@ -35,7 +37,7 @@ for src_name, dst_name in [
 
 # --- 2. Карточки ---
 # Диалог с рабочего стола — вместо старой карточки-уведомления
-shutil.copyfile(r'C:\Users\benq\Desktop\Окно UAC.png', os.path.join(SCU, 'card-notification.png'))
+shutil.copyfile(UAC_IMAGE, os.path.join(SCU, 'card-notification.png'))
 
 # Кроп панели настроек (пропорции подобраны под равную высоту с диалогом в вёрстке)
 settings = Image.open(straight_files['Настройки.png'])
@@ -68,4 +70,7 @@ paste_with_shadow(scaled('Настройки.png', 1100), (CANVAS_W - 1100 + 140
 paste_with_shadow(scaled('Бэнчмарк.png', 1200), (868, 950))
 
 canvas.convert('RGB').save(os.path.join(ROOT, 'static', 'compositor', 'hero.png'))
+# сайт подключает webp через <picture>; png используется как fallback и og:image
+canvas.convert('RGB').save(os.path.join(ROOT, 'static', 'compositor', 'hero.webp'),
+                           'WEBP', quality=90, method=6)
 print('done')

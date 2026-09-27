@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://safecleanup.vercel.app/sitemap.xml

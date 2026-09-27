@@ -16,7 +16,13 @@ const { head, put, list } = require('@vercel/blob');
 
 const PREFIX_VISIT = 'scu-stats/visits/';
 const PREFIX_DOWNLOAD = 'scu-stats/downloads/';
+// Без заданной переменной соль становится публичной (лежит в репозитории),
+// и хеш можно перебрать по списку известных IP — поэтому в проде TRACK_SALT
+// должна быть установлена в Vercel (Settings → Environment Variables).
 const SALT = process.env.TRACK_SALT || 'scu-track-salt-v1';
+if (!process.env.TRACK_SALT) {
+    console.warn('TRACK_SALT не задана — используется публичная соль из репозитория.');
+}
 
 function userHash(req) {
     const ip = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim()
@@ -76,10 +82,11 @@ module.exports = async (req, res) => {
 
         // если маркер только что создан — пересчитываем мимо кэша, чтобы
         // этот пользователь был учтён в ответе
-        const stats = await counts(!created);
+        const stats = await counts(created);
         res.setHeader('Cache-Control', 'no-store');
         res.status(200).json(stats);
     } catch (e) {
+        console.error('track failed:', e);
         res.status(500).json({ error: 'track_failed' });
     }
 };

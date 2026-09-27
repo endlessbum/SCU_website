@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCU</title>
+    <title>SCU — бесплатная утилита для настройки Windows</title>
     <meta name="description" content="Бесплатная утилита для настройки и обслуживания Windows. Множество скриптов в одном файле.">
+    <link rel="canonical" href="https://safecleanup.vercel.app/">
+    <meta property="og:title" content="SCU — бесплатная утилита для настройки Windows">
+    <meta property="og:description" content="Множество скриптов в одном файле: очистка, приватность, службы, автозагрузка и активация.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://safecleanup.vercel.app/">
+    <meta property="og:image" content="https://safecleanup.vercel.app/static/compositor/hero.png">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/png" sizes="32x32" href="/static/compositor/favicon-32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/static/compositor/favicon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/compositor/apple-touch-icon.png">
@@ -37,9 +44,9 @@
             font-size: 16px;
             line-height: 20px;
         }
-        .nav-date { color: #b5b5b5; }
+        .nav-date { color: #767676; }
         .nav-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-        .nav-stat { color: #b5b5b5; opacity: 0; transition: opacity .3s ease; }
+        .nav-stat { color: #767676; opacity: 0; transition: opacity .3s ease; }
         .nav-stat.visible { opacity: 1; }
 
         /* ---------- HERO ---------- */
@@ -195,7 +202,7 @@
             line-height: 16px;
             font-weight: 700;
             letter-spacing: 0.02em;
-            color: #8a8a8a;
+            color: #767676;
             text-transform: uppercase;
         }
         .info h2 {
@@ -210,7 +217,7 @@
             margin: 0 0 20px;
             font-size: 16px;
             line-height: 22px;
-            color: #9a9a9a;
+            color: #6b6b6b;
         }
         .copy p:last-child { margin-bottom: 0; }
 
@@ -276,7 +283,7 @@
             text-align: center;
             font-size: 12px;
             line-height: 16px;
-            color: #b5b5b5;
+            color: #767676;
             border-top: 1px dotted #eeeeee;
         }
         .legal a { color: inherit; transition: color .15s ease; }
@@ -343,14 +350,14 @@
             padding: 30px 28px;
             box-shadow: 12px 0 40px rgba(0, 0, 0, .12);
             /* в скрытом состоянии полностью за левым краем экрана */
-            transform: translateX(calc(-100% - 340px));
+            transform: translateX(calc(-100% - var(--panel-w)));
             z-index: 55;
         }
 
         .panel-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
         .panel-head .panel-titles { flex: 1; min-width: 0; }
         .panel-title { margin: 0; font-size: 18px; line-height: 23px; font-weight: 600; letter-spacing: -0.01em; color: #444444; }
-        .panel-sub { margin: 3px 0 0; font-size: 12px; line-height: 16px; color: #8a8a8a; }
+        .panel-sub { margin: 3px 0 0; font-size: 12px; line-height: 16px; color: #767676; }
         .panel-back {
             flex: none;
             border: 0;
@@ -392,12 +399,12 @@
         }
         .version-item:hover { background: #f5f5f5; }
         .version-item .version-num { font-size: 15px; line-height: 20px; font-weight: 600; color: #444444; }
-        .version-item .version-date { font-size: 12px; line-height: 16px; color: #8a8a8a; }
+        .version-item .version-date { font-size: 12px; line-height: 16px; color: #767676; }
 
         .changelog-body h3 { margin: 24px 0 8px; font-size: 14px; line-height: 19px; font-weight: 700; color: #444444; }
         .changelog-body h3:first-child { margin-top: 0; }
         .changelog-body ul { margin: 0; padding-left: 18px; }
-        .changelog-body li { margin: 0 0 8px; font-size: 13px; line-height: 19px; color: #7a7a7a; }
+        .changelog-body li { margin: 0 0 8px; font-size: 13px; line-height: 19px; color: #767676; }
         .changelog-body code {
             font-size: 12px;
             background: #f2f2f2;
@@ -415,7 +422,7 @@
         /* ---------- MOBILE ---------- */
         @media (max-width: 768px) {
             .nav { padding: 20px 20px; line-height: 22px; }
-            .nav-date, .nav-stat { color: #ccc; }
+            .nav-date, .nav-stat { color: #767676; }
 
             .hero { padding-top: 60px; display: flex; flex-direction: column; padding-bottom: 20px; }
             .hero .buttons { order: 3; }
@@ -536,11 +543,11 @@
 
 
     <nav class="nav">
-        <button class="versions-toggle" id="versionsToggle" aria-expanded="false" aria-controls="versionsPanel">Версии <span aria-hidden="true">→</span></button>
+        <button class="versions-toggle" id="versionsToggle" aria-expanded="false" aria-controls="versionsPanel">Версии <span aria-hidden="true">←</span></button>
         <div class="nav-meta">
-            <span class="nav-date">Обновлено: 26.09.26</span>
+            <span class="nav-date">Обновлено: 26.09.2026</span>
             <span class="nav-stat" id="statVisits">Посещений: —</span>
-            <span class="nav-stat" id="statDownloads">Загрузок: —</span>
+            <span class="nav-stat" id="statDownloads">Скачали: —</span>
         </div>
     </nav>
 
@@ -560,7 +567,10 @@
         </a>
 
         <div class="hero-image">
-            <img src="static/compositor/hero.webp" width="2936" height="1443" fetchpriority="high" alt="Интерфейс приложения SCU">
+            <picture>
+                <source srcset="static/compositor/hero.webp" type="image/webp">
+                <img src="static/compositor/hero.png" width="2936" height="1443" fetchpriority="high" alt="Интерфейс приложения SCU">
+            </picture>
         </div>
     </header>
 
@@ -681,7 +691,7 @@
         var VERSIONS = [
             {
                 num: "2.1.1",
-                date: "26.09.26",
+                date: "26.09.2026",
                 sections: [
                     {
                         title: "Безопасность сканера",
@@ -812,13 +822,18 @@
     <script>
         // Счётчики посещений и загрузок: дедупликация по SHA256 на сервере (/api/track).
         (function () {
+            // Ссылка на скачивание в одном месте: подставляется в обе кнопки
+            // (hero и футер); href в разметке — fallback для случая без JS.
+            var DOWNLOAD_URL = 'https://github.com/endlessbum/SCU/releases/download/v2.1.1/SCU_Setup_2.1.1.0.exe';
+            document.querySelectorAll('a.btn-download').forEach(function (a) { a.href = DOWNLOAD_URL; });
+
             var elVisits = document.getElementById('statVisits');
             var elDownloads = document.getElementById('statDownloads');
 
             function render(data) {
                 if (!data || typeof data.visits !== 'number') return;
                 elVisits.textContent = 'Посещений: ' + data.visits.toLocaleString('ru-RU');
-                elDownloads.textContent = 'Загрузок: ' + data.downloads.toLocaleString('ru-RU');
+                elDownloads.textContent = 'Скачали: ' + data.downloads.toLocaleString('ru-RU');
                 elVisits.classList.add('visible');
                 elDownloads.classList.add('visible');
             }
@@ -871,15 +886,28 @@
                 await wait(MORPH_MS + WORD_PAUSE);
             }
 
-            // не крутим анимацию в фоновой вкладке
+            // не крутим анимацию в фоновой вкладке и когда hero вне экрана
+            var inView = false, viewWaiters = [];
+            new IntersectionObserver(function (entries) {
+                inView = entries[0].isIntersecting;
+                if (inView) {
+                    viewWaiters.forEach(function (r) { r(); });
+                    viewWaiters = [];
+                }
+            }).observe(wrap);
+
             function waitVisible() {
-                if (!document.hidden) return Promise.resolve();
-                return new Promise(function (resolve) {
-                    document.addEventListener('visibilitychange', function onVis() {
-                        document.removeEventListener('visibilitychange', onVis);
-                        resolve();
-                    }, { once: true });
-                });
+                var promises = [];
+                if (document.hidden) {
+                    promises.push(new Promise(function (resolve) {
+                        document.addEventListener('visibilitychange', function onVis() {
+                            document.removeEventListener('visibilitychange', onVis);
+                            resolve();
+                        }, { once: true });
+                    }));
+                }
+                if (!inView) promises.push(new Promise(function (r) { viewWaiters.push(r); }));
+                return Promise.all(promises);
             }
 
             (async function loop() {

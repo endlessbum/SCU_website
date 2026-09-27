@@ -1,5 +1,8 @@
 {
-  "dependencies": {
-    "@vercel/blob": "^2.8.0"
-  }
+    "name": "scu-website",
+    "version": "2.1.1",
+    "private": true,
+    "dependencies": {
+        "@vercel/blob": "^2.8.0"
+    }
 }
