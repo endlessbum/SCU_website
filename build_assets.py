@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Сборка ассетов сайта: скрины карусели и hero-коллаж."""
+"""Сборка ассетов сайта: скрины карусели, hero-коллаж и og:image."""
 import os
 import shutil
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageOps
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ROUND = os.path.join(ROOT, 'Скрины', 'Срины приложения с сглаженными углами')
@@ -24,12 +24,17 @@ straight_files = {f: os.path.join(STRAIGHT, f)
                   for f in os.listdir(STRAIGHT) if f.lower().endswith('.png')}
 
 # --- 1. Скрины для карусели (прямые углы), имена прежние ---
+# рядом с png сохраняется webp: разметка подключает его через <picture>,
+# png остаётся fallback'ом
 for src_name, dst_name in [
     ('Установка компонентов.png', 'screen-install.png'),
     ('Удаление мусорного ПО.png', 'screen-cleanup.png'),
     ('Питание, память, CPU.png', 'screen-power.png'),
 ]:
-    shutil.copyfile(straight_files[src_name], os.path.join(SCU, dst_name))
+    dst = os.path.join(SCU, dst_name)
+    shutil.copyfile(straight_files[src_name], dst)
+    Image.open(dst).convert('RGB').save(os.path.splitext(dst)[0] + '.webp',
+                                        'WEBP', quality=90, method=6)
 
 # --- 2. Hero-коллаж из скруглённых скринов ---
 CANVAS_W, CANVAS_H = 2936, 1443
@@ -56,8 +61,13 @@ paste_with_shadow(scaled('Установка компонентов.png', 1100),
 paste_with_shadow(scaled('Настройки.png', 1100), (CANVAS_W - 1100 + 140, 680))
 paste_with_shadow(scaled('Бэнчмарк.png', 1200), (868, 950))
 
-canvas.convert('RGB').save(os.path.join(ROOT, 'static', 'compositor', 'hero.png'))
+rgb = canvas.convert('RGB')
 # сайт подключает webp через <picture>; png используется как fallback и og:image
-canvas.convert('RGB').save(os.path.join(ROOT, 'static', 'compositor', 'hero.webp'),
-                           'WEBP', quality=90, method=6)
+rgb.save(os.path.join(ROOT, 'static', 'compositor', 'hero.png'))
+rgb.save(os.path.join(ROOT, 'static', 'compositor', 'hero.webp'),
+         'WEBP', quality=90, method=6)
+
+# --- 3. og:image 1200x630 — cover-кроп из hero ---
+ImageOps.fit(rgb, (1200, 630), Image.LANCZOS).save(
+    os.path.join(ROOT, 'static', 'compositor', 'og-image.png'), optimize=True)
 print('done')
