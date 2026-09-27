@@ -121,6 +121,23 @@
         }
         .btn:hover { transform: scale(1.03); }
         .btn img { width: 20px; height: 20px; }
+
+        /* Hover: label rolls up, thin subtitle rolls in from below, icon stays still.
+           Both layers are stacked in one grid cell, so the block width (and the icon
+           position) is the same in normal and hover state. */
+        .btn-flip { display: inline-grid; text-align: center; }
+        .btn-roll { grid-area: 1 / 1; height: 20px; overflow: hidden; }
+        .btn-label,
+        .btn-sub {
+            display: block;
+            height: 20px;
+            line-height: 20px;
+            transition: transform .25s ease, opacity .25s ease;
+        }
+        .btn-sub { font-size: 11px; font-weight: 300; opacity: 0; transform: translateY(20px); }
+        .btn:hover .btn-label { transform: translateY(-20px); opacity: 0; }
+        .btn:hover .btn-sub { transform: translateY(0); opacity: .8; }
+
         .btn-download { width: 200px; background: #444444; color: #fff; }
         .btn-download img { margin-top: -2px; }
 
@@ -396,7 +413,7 @@
 
             .hero { padding-top: 60px; display: flex; flex-direction: column; padding-bottom: 20px; }
             .hero .buttons { order: 3; }
-            .hero .vt-badge { order: 4; margin-top: 12px; }
+            .hero .vt-badge { order: 4; align-self: center; margin-top: 12px; }
             .hero h1 { font-size: calc((100vw - 50px) / 8.75); line-height: 1.02; }
             .hero .sub { margin-top: 14px; font-size: 17.5px; line-height: 22px; }
 
@@ -470,8 +487,41 @@
             to   { transform: translate3d(-50%, 0, 0); }
         }
 
+        /* ---------- SCROLL TO TOP ---------- */
+        .to-top {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            z-index: 60;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 999px;
+            background: #444444;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .18);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(calc(100% + 25px));
+            transition: transform .35s cubic-bezier(.32, .72, .34, 1), opacity .35s ease, visibility 0s linear .35s, background-color .15s ease;
+        }
+        .to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: transform .35s cubic-bezier(.32, .72, .34, 1), opacity .35s ease, visibility 0s, background-color .15s ease;
+        }
+        .to-top:hover { background: #0255fc; }
+        .to-top svg { width: 20px; height: 20px; }
+        .to-top:active { transform: translateY(0) scale(.94); }
+
         @media (prefers-reduced-motion: reduce) {
             .gallery-track { animation: none; }
+            .to-top { transition: opacity .2s ease, background-color .15s ease; transform: none; }
         }
 
     </style>
@@ -495,8 +545,8 @@
         <p class="sub">Множество скриптов в одном файле</p>
 
         <div class="buttons">
-            <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v2.1.1/SCU_Setup_2.1.1.0.exe"><img src="static/compositor/windows-logo.svg" alt="">Скачать</a>
-            <a class="btn btn-source" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="static/compositor/github-logo.svg" alt="">Исходный код</a>
+            <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v2.1.1/SCU_Setup_2.1.1.0.exe"><img src="static/compositor/windows-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Скачать</span></span><span class="btn-roll"><span class="btn-sub">Windows 11 x64</span></span></span></a>
+            <a class="btn btn-source" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="static/compositor/github-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Исходный код</span></span><span class="btn-roll"><span class="btn-sub">GitHub</span></span></span></a>
         </div>
 
         <a class="vt-badge" href="https://www.virustotal.com/gui/url/333ded8049c8a1599af1b3981d68845ab1bd8ea9a92f3c93f2d6d3af8a0e9aa6" target="_blank" rel="noopener" aria-label="Результат сканирования на VirusTotal: 0 из 92">
@@ -568,8 +618,8 @@
             <span>SCU</span>
         </div>
         <div class="buttons">
-            <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v2.1.1/SCU_Setup_2.1.1.0.exe"><img src="static/compositor/windows-logo.svg" alt="">Скачать</a>
-            <a class="btn btn-source" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="static/compositor/github-logo.svg" alt="">Исходный код</a>
+            <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v2.1.1/SCU_Setup_2.1.1.0.exe"><img src="static/compositor/windows-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Скачать</span></span><span class="btn-roll"><span class="btn-sub">Windows 11 x64</span></span></span></a>
+            <a class="btn btn-source" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="static/compositor/github-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Исходный код</span></span><span class="btn-roll"><span class="btn-sub">GitHub</span></span></span></a>
         </div>
     </footer>
 
@@ -602,6 +652,10 @@
     </aside>
 
     <p class="legal">SCU не связан с другими компаниями и не одобрен ни одной из них · <a href="/privacy.html">Политика конфиденциальности</a></p>
+
+    <button class="to-top" id="toTop" aria-label="Наверх">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
 
     <script>
         // Панель «Версии»: список сборок и вложенная панель с описанием изменений.
@@ -816,6 +870,28 @@
                     await cycle();
                 }
             })();
+        })();
+    </script>
+
+    <script>
+        // Кнопка «наверх»: появляется, когда прокручена половина страницы.
+        (function () {
+            var btn = document.getElementById('toTop');
+            if (!btn) return;
+
+            function update() {
+                var max = document.documentElement.scrollHeight - window.innerHeight;
+                btn.classList.toggle('visible', max > 0 && window.scrollY >= max / 2);
+            }
+
+            btn.addEventListener('click', function () {
+                var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+            });
+
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
         })();
     </script>
 
