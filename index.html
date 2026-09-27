@@ -177,20 +177,6 @@
         .gallery-track img { flex: 1 1 0; min-height: 0; width: 100%; object-fit: cover; }
         .gallery-track .dup { display: none; }
 
-        .cards {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-top: 44px;
-            max-width: 433px;
-        }
-        .cards img {
-            border-radius: 12px;
-            box-shadow: 0 14px 34px rgba(0, 0, 0, .18);
-        }
-        .cards img:first-child { width: 246px; }
-        .cards img:last-child { width: 141px; }
-
         .info {
             width: 50%;
             background: #eeeeee;
@@ -478,9 +464,6 @@
             .info h2 { margin-top: 12px; font-size: 21px; line-height: 26px; }
             .copy { max-width: none; margin-top: 21px; }
             .copy p { font-size: 14px; line-height: 20px; margin-bottom: 20px; }
-            .cards { margin-top: 36px; gap: 12px; }
-            .cards img:first-child { width: 62%; }
-            .cards img:last-child { width: calc(38% - 12px); }
             .features { margin-top: 40px; max-width: none; }
             .features li { height: 44px; font-size: 14px; padding-left: 8px; }
             .features .sub { padding-left: 23px; }
@@ -595,11 +578,6 @@
                 <p>Приложение бесплатное, работает на современном .NET и открыто для доработок. Вы можете взять исходный код, убрать ненужные разделы, добавить свои сценарии или просто пользоваться готовым инструментом, который делает систему быстрее, чище и экономит ваше время.</p>
             </div>
 
-            <div class="cards" aria-hidden="true">
-                <img src="static/scuapp/card-notification.png" width="748" height="261" loading="lazy" decoding="async" alt="">
-                <img src="static/scuapp/card-settings.png" width="418" height="255" loading="lazy" decoding="async" alt="">
-            </div>
-
             <ul class="features">
                 <li class="group">Обзор</li>
                 <li class="sub">Главная</li>
@@ -679,7 +657,7 @@
         <div class="changelog-body" id="changelogBody"></div>
     </aside>
 
-    <p class="legal">SCU не связан с другими компаниями и не одобрен ни одной из них · <a href="/privacy.html">Политика конфиденциальности</a></p>
+    <p class="legal">SCU не связан ни с одной компанией · <a href="/privacy.html">Политика конфиденциальности</a></p>
 
     <button class="to-top" id="toTop" aria-label="Наверх">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>

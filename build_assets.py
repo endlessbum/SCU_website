@@ -8,8 +8,6 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 ROUND = os.path.join(ROOT, 'Скрины', 'Срины приложения с сглаженными углами')
 STRAIGHT = os.path.join(ROOT, 'Скрины', 'Срины приложения с углами 90 градусов')
 SCU = os.path.join(ROOT, 'static', 'scuapp')
-# Диалог с рабочего стола — путь можно переопределить: UAC_IMAGE=... python build_assets.py
-UAC_IMAGE = os.environ.get('UAC_IMAGE', r'C:\Users\benq\Desktop\Окно UAC.png')
 
 
 def fix_name(n):
@@ -35,16 +33,7 @@ for src_name, dst_name in [
 ]:
     shutil.copyfile(straight_files[src_name], os.path.join(SCU, dst_name))
 
-# --- 2. Карточки ---
-# Диалог с рабочего стола — вместо старой карточки-уведомления
-shutil.copyfile(UAC_IMAGE, os.path.join(SCU, 'card-notification.png'))
-
-# Кроп панели настроек (пропорции подобраны под равную высоту с диалогом в вёрстке)
-settings = Image.open(straight_files['Настройки.png'])
-card = settings.crop((1440, 200, 1858, 455))
-card.save(os.path.join(SCU, 'card-settings.png'))
-
-# --- 3. Hero-коллаж из скруглённых скринов ---
+# --- 2. Hero-коллаж из скруглённых скринов ---
 CANVAS_W, CANVAS_H = 2936, 1443
 canvas = Image.new('RGBA', (CANVAS_W, CANVAS_H), (255, 255, 255, 255))
 
