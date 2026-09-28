@@ -280,7 +280,7 @@
 
             var sw = wrap.querySelector('.morph-switch');
             var GRAY = '#444444';
-            var COLORS = ['#34c759', '#af52de', '#32ade6', '#0255fc'];
+            var COLORS = ['#34c759', '#af52de', '#32ade6', '#1C5FF6'];
             var MORPH_MS = 500, HOLD_ON = 1300, HOLD_OFF = 420, WORD_PAUSE = 1800;
 
             function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
