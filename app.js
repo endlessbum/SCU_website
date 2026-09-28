@@ -198,6 +198,48 @@
                     closeAll();
                 }
             });
+
+            // Свайпы на тач-экранах: открыть список версий — слева направо
+            // (от левого края), закрыть — справа налево. В окне чтения версии
+            // свайп справа налево закрывает её и возвращает к списку.
+            (function () {
+                var SWIPE_MIN = 70;   // минимальная длина горизонтального жеста
+                var EDGE = 80;        // свайп-открытие начинается не дальше этого от левого края
+                var startX = 0, startY = 0, tracking = false;
+
+                document.addEventListener('touchstart', function (e) {
+                    tracking = e.touches.length === 1;
+                    if (!tracking) return;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }, { passive: true });
+
+                document.addEventListener('touchend', function (e) {
+                    if (!tracking) return;
+                    tracking = false;
+                    var t = e.changedTouches[0];
+                    var dx = t.clientX - startX;
+                    var dy = t.clientY - startY;
+                    // горизонтальный жест должен явно преобладать над вертикальным
+                    if (Math.abs(dx) < SWIPE_MIN || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+
+                    var changelogOpen = changelog.classList.contains('open');
+                    var versionsOpen = versions.classList.contains('open');
+
+                    if (dx > 0 && !versionsOpen && !changelogOpen && startX <= EDGE) {
+                        open(overlay);
+                        open(versions);
+                        toggle.setAttribute('aria-expanded', 'true');
+                        focusTitle(versions);
+                    } else if (dx < 0 && changelogOpen) {
+                        close(changelog);
+                        var firstItem = versionsList.querySelector('.version-item');
+                        if (firstItem) firstItem.focus({ preventScroll: true });
+                    } else if (dx < 0 && versionsOpen) {
+                        closeAll();
+                    }
+                }, { passive: true });
+            })();
         })();
 
         // Счётчики посещений и загрузок: дедупликация по SHA256 на сервере (/api/track).
