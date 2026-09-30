@@ -31,11 +31,11 @@
 
 
     <nav class="nav">
-        <button class="versions-toggle" id="versionsToggle" aria-expanded="false" aria-controls="versionsPanel">Версии <span aria-hidden="true">→</span></button>
+        <button class="versions-toggle" id="versionsToggle" aria-expanded="false" aria-controls="versionsPanel">Версии <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></button>
         <div class="nav-meta">
-            <span class="nav-date">⟳: 28.09.2026</span>
-            <span class="nav-stat" id="statVisits">👁: —</span>
-            <span class="nav-stat" id="statDownloads">⬇: —</span>
+            <span class="nav-date"><span class="icon icon-refresh" aria-hidden="true"></span>28.09.2026</span>
+            <span class="nav-stat" id="statVisits"><span class="icon icon-eye" aria-hidden="true"></span><span class="stat-value">—</span></span>
+            <span class="nav-stat" id="statDownloads"><span class="icon icon-download" aria-hidden="true"></span><span class="stat-value">—</span></span>
         </div>
     </nav>
 
@@ -166,16 +166,16 @@
             <div class="panel-titles">
                 <p class="panel-title" tabindex="-1">Версии</p>
             </div>
-            <button class="panel-close" id="versionsClose" aria-label="Закрыть">×</button>
+            <button class="panel-close" id="versionsClose" aria-label="Закрыть"><span class="icon icon-close" aria-hidden="true"></span></button>
         </div>
         <div id="versionsList"></div>
     </aside>
 
     <aside class="side-panel changelog-panel" id="changelogPanel" tabindex="-1" aria-hidden="true">
         <div class="panel-head">
-            <button class="panel-back" id="changelogBack" aria-label="Назад к списку версий">←</button>
+            <button class="panel-back" id="changelogBack" aria-label="Назад к списку версий"><span class="icon icon-arrow-left" aria-hidden="true"></span></button>
             <div class="panel-titles" id="changelogTitles"></div>
-            <button class="panel-close" id="changelogClose" aria-label="Закрыть">×</button>
+            <button class="panel-close" id="changelogClose" aria-label="Закрыть"><span class="icon icon-close" aria-hidden="true"></span></button>
         </div>
         <div class="changelog-body" id="changelogBody"></div>
     </aside>

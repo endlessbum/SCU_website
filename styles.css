@@ -24,6 +24,24 @@ a { color: inherit; text-decoration: none; }
 .nav-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 .nav-stat { color: #767676; opacity: 0; transition: opacity .3s ease; }
 .nav-stat.visible { opacity: 1; }
+.nav-date, .nav-stat { display: inline-flex; align-items: center; gap: 5px; }
+
+/* ---------- ИКОНКИ (PNG через mask — красятся в цвет текста) ---------- */
+.icon {
+    display: inline-block;
+    flex: none;
+    width: 15px;
+    height: 15px;
+    background-color: currentColor;
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+}
+.icon-refresh     { --icon: url('static/compositor/icons/refresh.png'); }
+.icon-eye         { --icon: url('static/compositor/icons/eye.png'); }
+.icon-download    { --icon: url('static/compositor/icons/download.png'); }
+.icon-arrow-right { --icon: url('static/compositor/icons/arrow-right.png'); }
+.icon-arrow-left  { --icon: url('static/compositor/icons/arrow-left.png'); }
+.icon-close       { --icon: url('static/compositor/icons/close.png'); }
 
 /* ---------- HERO ---------- */
 .hero { text-align: center; padding-top: 112px; }
@@ -267,6 +285,8 @@ a { color: inherit; text-decoration: none; }
     transition: color .15s ease;
 }
 .versions-toggle:hover { color: #1C5FF6; }
+.toggle-arrow { transition: transform .25s ease; }
+.versions-toggle[aria-expanded="true"] .toggle-arrow { transform: rotate(180deg); }
 
 .versions-overlay {
     position: fixed;
@@ -332,6 +352,8 @@ html.panel-lock { overflow: hidden; }
 .panel-sub { margin: 3px 0 0; font-size: 12px; line-height: 16px; color: #767676; }
 .panel-back {
     flex: none;
+    display: inline-flex;
+    align-items: center;
     border: 0;
     background: none;
     font-size: 20px;
@@ -340,9 +362,12 @@ html.panel-lock { overflow: hidden; }
     padding: 2px 6px 2px 0;
     transition: color .15s ease;
 }
+.panel-back .icon { width: 16px; height: 16px; }
 .panel-back:hover { color: #1C5FF6; }
 .panel-close {
     flex: none;
+    display: inline-flex;
+    align-items: center;
     border: 0;
     background: none;
     font-size: 26px;
@@ -351,6 +376,7 @@ html.panel-lock { overflow: hidden; }
     padding: 0 2px 4px 6px;
     transition: color .15s ease;
 }
+.panel-close .icon { width: 14px; height: 14px; }
 .panel-close:hover { color: #444444; }
 
 .version-item {

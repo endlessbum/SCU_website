@@ -372,8 +372,11 @@
 
             function render(data) {
                 if (!data || typeof data.visits !== 'number') return;
-                elVisits.textContent = '👁: ' + data.visits.toLocaleString('ru-RU');
-                elDownloads.textContent = '⬇: ' + data.downloads.toLocaleString('ru-RU');
+                var visitsValue = elVisits.querySelector('.stat-value');
+                var downloadsValue = elDownloads.querySelector('.stat-value');
+                if (!visitsValue || !downloadsValue) return;
+                visitsValue.textContent = data.visits.toLocaleString('ru-RU');
+                downloadsValue.textContent = data.downloads.toLocaleString('ru-RU');
                 elVisits.classList.add('visible');
                 elDownloads.classList.add('visible');
             }
