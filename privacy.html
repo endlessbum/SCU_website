@@ -170,13 +170,10 @@
         </ul>
 
         <h2>Срок хранения</h2>
-        <p>Маркеры-хеши хранятся бессрочно — они и есть накопленные счётчики. Удаление отдельных маркеров технически невозможно, потому что по хешу нельзя определить, чей он именно. Если вы принципиально не хотите участвовать в подсчёте — блокируйте запросы к <code>/api/track</code> любым блокировщиком (uBlock Origin и аналоги), счётчик не пострадает, а вы не будете учтены.</p>
+        <p>Маркеры-хеши хранятся бессрочно — они и есть накопленные счётчики. Удаление отдельных маркеров технически невозможно, потому что по хешу нельзя определить, чей он именно.</p>
 
         <h2>Данные приложения</h2>
         <p>Само приложение SCU — отдельная программа, работающая локально на вашем компьютере. Настоящая политика описывает только сайт. Что делает с данными установленное приложение, описано в его документации и исходном коде: <a class="inline" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener">github.com/endlessbum/SCU</a>.</p>
-
-        <h2>Изменения политики</h2>
-        <p>Если порядок обработки данных изменится, дата «Обновлено» вверху страницы изменится вместе с текстом. Существенных причин менять что-либо нет: собирать больше, чем описано выше, здесь не планируется.</p>
 
         <h2>Контакты</h2>
         <p>Вопросы по этой политике — через <a class="inline" href="https://github.com/endlessbum/SCU/issues" target="_blank" rel="noopener">issues репозитория проекта</a>.</p>
@@ -188,27 +185,7 @@
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
 
-    <script>
-        // Кнопка «наверх»: появляется, когда прокручена половина страницы.
-        (function () {
-            var btn = document.getElementById('toTop');
-            if (!btn) return;
-
-            function update() {
-                var max = document.documentElement.scrollHeight - window.innerHeight;
-                btn.classList.toggle('visible', max > 0 && window.scrollY >= max / 2);
-            }
-
-            btn.addEventListener('click', function () {
-                var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-            });
-
-            window.addEventListener('scroll', update, { passive: true });
-            window.addEventListener('resize', update);
-            update();
-        })();
-    </script>
+    <script src="to-top.js" defer></script>
 
     <script src="cursor.js" defer></script>
 </body>
