@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="28" viewBox="0 0 144 28" role="img" aria-label="Платформа: Windows 11 x64">
+  <title>Платформа: Windows 11 x64</title>
+  <defs>
+    <clipPath id="r"><rect width="144" height="28" rx="6"/></clipPath>
+  </defs>
+  <g clip-path="url(#r)">
+    <rect width="78" height="28" fill="#444444"/>
+    <rect x="78" width="66" height="28" fill="#1C5FF6"/>
+  </g>
+  <text x="39" y="18.5" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#ffffff">платформа</text>
+  <g transform="translate(85.5,7) scale(0.16)">
+    <path fill="#ffffff" d="M0 12.5l35.7-4.9V42H0zM39.9 6.6L88 0v42H39.9zM0 46h35.7v34.4L0 75.5zM39.9 46H88v42l-48.1-6.6z"/>
+  </g>
+  <text x="121.5" y="18.5" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#ffffff">11 x64</text>
+</svg>
