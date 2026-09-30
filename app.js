@@ -104,6 +104,22 @@
             function open(el) { el.classList.add('open'); el.setAttribute('aria-hidden', 'false'); }
             function close(el) { el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); }
 
+            // Пока открыта панель (список версий или описание), основная страница
+            // не прокручивается — скролл работает только внутри самой панели.
+            // Класс вешается на html: у html задан overflow-x, из-за него
+            // overflow на body не блокирует прокрутку страницы.
+            function syncScrollLock() {
+                var locked = versions.classList.contains('open') || changelog.classList.contains('open');
+                document.documentElement.classList.toggle('panel-lock', locked);
+                // компенсация ширины исчезнувшего скроллбара, чтобы контент не прыгал
+                if (locked) {
+                    var sb = window.innerWidth - document.documentElement.clientWidth;
+                    document.body.style.paddingRight = sb > 0 ? sb + 'px' : '';
+                } else {
+                    document.body.style.paddingRight = '';
+                }
+            }
+
             // фокус при открытии получает заголовок панели (tabindex="-1"),
             // чтобы скринридер объявил её название
             function focusTitle(panel) {
@@ -164,6 +180,7 @@
                 close(versions);
                 close(overlay);
                 toggle.setAttribute('aria-expanded', 'false');
+                syncScrollLock();
                 if (refocus !== false) toggle.focus({ preventScroll: true });
             }
 
@@ -174,6 +191,7 @@
                     open(overlay);
                     open(versions);
                     toggle.setAttribute('aria-expanded', 'true');
+                    syncScrollLock();
                     focusTitle(versions);
                 }
             });
@@ -192,6 +210,7 @@
                 if (e.key !== 'Escape') return;
                 if (changelog.classList.contains('open')) {
                     close(changelog);
+                    syncScrollLock();
                     var firstItem = versionsList.querySelector('.version-item');
                     if (firstItem) firstItem.focus({ preventScroll: true });
                 } else if (versions.classList.contains('open')) {
@@ -230,6 +249,7 @@
                         open(overlay);
                         open(versions);
                         toggle.setAttribute('aria-expanded', 'true');
+                        syncScrollLock();
                         focusTitle(versions);
                     } else if (dx < 0 && changelogOpen) {
                         close(changelog);

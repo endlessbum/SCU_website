@@ -281,12 +281,20 @@ a { color: inherit; text-decoration: none; }
 }
 .versions-overlay.open { opacity: 1; pointer-events: auto; }
 
+/* открытая панель блокирует скролл основной страницы (класс ставит app.js).
+   Вешается на html: у html уже задан overflow-x, из-за него overflow на body
+   не распространяется на прокрутку страницы */
+html.panel-lock { overflow: hidden; }
+
 .side-panel {
     position: fixed;
     top: 0;
     height: 100%;
     background: #fff;
     overflow-y: auto;
+    /* прокрутка не «протекает» из панели на основную страницу, когда
+       содержимое панели закончилось */
+    overscroll-behavior: contain;
     /* горизонталь — свайпам панели, вертикаль — нативному скроллу */
     touch-action: pan-y;
     /* visibility отключает отрисовку и перехват кликов у спрятанной панели;
@@ -388,7 +396,7 @@ a { color: inherit; text-decoration: none; }
     .hero { padding-top: 60px; display: flex; flex-direction: column; padding-bottom: 20px; }
     .hero .buttons { order: 3; }
     .hero .vt-badge { order: 4; align-self: center; margin-top: 12px; }
-    .hero h1 { font-size: calc((100vw - 50px) / 8.75); line-height: 1.02; }
+    .hero h1 { font-size: calc((100vw - 50px) / 9.4); line-height: 1.02; }
     .hero .sub { margin-top: 14px; font-size: 17.5px; line-height: 22px; }
 
     .hero-image {
