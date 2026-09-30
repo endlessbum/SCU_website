@@ -90,6 +90,39 @@
             .page { padding: 46px 22px 70px; }
             h1 { font-size: 30px; line-height: 36px; }
         }
+
+        .to-top {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            z-index: 60;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 999px;
+            background: #444444;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .18);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(calc(100% + 25px));
+            transition: transform .35s cubic-bezier(.32, .72, .34, 1), opacity .35s ease, visibility 0s linear .35s, background-color .15s ease;
+        }
+        .to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: transform .35s cubic-bezier(.32, .72, .34, 1), opacity .35s ease, visibility 0s, background-color .15s ease;
+        }
+        .to-top:hover { background: #1C5FF6; }
+        .to-top svg { width: 20px; height: 20px; }
+        .to-top:active { transform: translateY(0) scale(.94); }
+        @media (prefers-reduced-motion: reduce) {
+            .to-top { transition: opacity .2s ease, background-color .15s ease; transform: none; }
+        }
     </style>
     <link rel="stylesheet" href="cursor.css">
 </head>
@@ -102,7 +135,7 @@
 
     <div class="page">
         <h1>Политика конфиденциальности</h1>
-        <p class="updated">Обновлено: 27.09.2026</p>
+        <p class="updated">Обновлено: 30.09.2026</p>
 
         <p>Эта политика честно описывает, что происходит с данными, когда вы открываете сайт SCU и пользуетесь им. Коротко: сайт не знает о вас почти ничего, и это не преувеличение.</p>
 
@@ -131,8 +164,9 @@
         <ul>
             <li><strong>Vercel Inc.</strong> — хостинг сайта и API. При любом обращении к сайту Vercel технически обрабатывает ваш запрос (IP, время, URL) согласно <a class="inline" href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener">своей политике конфиденциальности</a>. Управлять этим сайт не может.</li>
             <li><strong>Google Fonts</strong> — шрифты загружаются с серверов Google, поэтому Google видит ваши запросы к ним (IP-адрес). Это стандартная механика подключения веб-шрифтов.</li>
-            <li><strong>GitHub</strong> — по кнопкам «Скачать» и «Исходный код» вы переходите на github.com. GitHub получает данные вашего визита согласно своей политике; сайт при этом фиксирует только факт нажатия «Скачать» (см. раздел «Что собирается»).</li>
-            <li><strong>Ozon Банк</strong> — ссылка поддержки ведёт на страницу оплаты Ozon. Всё, что вы вводите там, обрабатывается Ozon Банком по его правилам; сайт этих данных не видит и не получает.</li>
+            <li><strong>GitHub</strong> — по кнопкам «Скачать» и «Исходный код» вы переходите на github.com. Кнопка «Скачать» сначала ведёт на служебный адрес <code>/download</code>, с которого сайт перенаправляет на GitHub Releases, — сам файл лежит на GitHub, а не на сайте. GitHub получает данные вашего визита согласно своей политике; сайт при этом фиксирует только факт нажатия «Скачать» (см. раздел «Что собирается»).</li>
+            <li><strong>VirusTotal</strong> — на главной есть бейдж с результатом сканирования сборки. Сама картинка хранится на сайте и никуда не отправляется; по клику вы переходите на virustotal.com, который далее обрабатывает ваш визит по <a class="inline" href="https://docs.virustotal.com/docs/general-privacy-policy" target="_blank" rel="noopener">своей политике конфиденциальности</a>.</li>
+            <li><strong>Ozon Банк</strong> — блок «Поддержи проект» (ссылка и QR-код) ведёт на страницу оплаты СБП Ozon. Всё, что вы вводите там, обрабатывается Ozon Банком по его правилам; сайт этих данных не видит и не получает.</li>
         </ul>
 
         <h2>Срок хранения</h2>
@@ -149,6 +183,32 @@
     </div>
 
     <p class="legal">SCU не связан ни с одной компанией</p>
+
+    <button class="to-top" id="toTop" aria-label="Наверх">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <script>
+        // Кнопка «наверх»: появляется, когда прокручена половина страницы.
+        (function () {
+            var btn = document.getElementById('toTop');
+            if (!btn) return;
+
+            function update() {
+                var max = document.documentElement.scrollHeight - window.innerHeight;
+                btn.classList.toggle('visible', max > 0 && window.scrollY >= max / 2);
+            }
+
+            btn.addEventListener('click', function () {
+                var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+            });
+
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        })();
+    </script>
 
     <script src="cursor.js" defer></script>
 </body>
