@@ -209,16 +209,19 @@
 
             // Пока открыта панель (список версий или описание), основная страница
             // не прокручивается — скролл работает только внутри самой панели.
-            // На тач-устройствах (iOS) переключение overflow у корня ломает
-            // отрисовку визуального вьюпорта: страница остаётся со «залипшими»
-            // белыми полосами сверху и снизу даже после закрытия панели
-            // (баг Safari 26, bugs.webkit.org/show_bug.cgi?id=297779).
-            // Поэтому там скролл блокируется отменой touchmove/wheel вне панелей,
-            // а класс с overflow:hidden остаётся только для десктопа.
-            // Класс вешается на html: у html задан overflow-x, из-за него
-            // overflow на body не блокирует прокрутку страницы.
+            // На тач-устройствах страница обездвиживается фиксацией body
+            // (position:fixed с компенсацией top): документ перестаёт переполнять
+            // вьюпорт, поэтому скролл фона и «резинка» overscroll невозможны
+            // в принципе, а восстановление позиции не требует цикла scrollTo,
+            // раскачивающего вьюпорт. Класс с overflow:hidden у корня здесь не
+            // используется: на iOS он ломает отрисовку визуального вьюпорта —
+            // остаются «залипшие» белые полосы сверху и снизу даже после
+            // закрытия панели (баг Safari 26, bugs.webkit.org/show_bug.cgi?id=297779).
+            // На десктопе остаётся overflow:hidden у html: у него уже задан
+            // overflow-x, из-за него overflow на body не блокирует прокрутку.
             var touchDevice = window.matchMedia('(hover: none) and (pointer: coarse)');
             var lockedScrollY = 0;
+            var bodyPinned = false;
 
             function anyPanelOpen() {
                 return versions.classList.contains('open') || changelog.classList.contains('open');
@@ -227,6 +230,8 @@
                 return !versions.contains(target) && !changelog.contains(target);
             }
 
+            // страховка для не-тачных жестов (колесо мыши на гибридах) и для
+            // браузеров, где media query выше не сработал
             document.addEventListener('touchmove', function (e) {
                 if (!anyPanelOpen() || !outsidePanels(e.target)) return;
                 e.preventDefault();
@@ -237,23 +242,30 @@
                 e.preventDefault();
             }, { passive: false });
 
+            function pinBody() {
+                lockedScrollY = window.scrollY;
+                document.body.style.position = 'fixed';
+                document.body.style.top = -lockedScrollY + 'px';
+                document.body.style.width = '100%';
+                bodyPinned = true;
+            }
+
+            function unpinBody() {
+                document.body.style.position = '';
+                document.body.style.top = '';
+                document.body.style.width = '';
+                bodyPinned = false;
+                window.scrollTo(0, lockedScrollY);
+            }
+
             function syncScrollLock() {
                 var locked = anyPanelOpen();
                 if (touchDevice.matches) {
-                    if (locked) {
-                        lockedScrollY = window.scrollY;
-                        // гасим инерционный скролл, запущенный жестом, которым
-                        // открыли панель: он иначе доскроллит страницу «под» панелью
-                        var pinUntil = performance.now() + 450;
-                        (function pin() {
-                            if (!anyPanelOpen()) return;
-                            if (window.scrollY !== lockedScrollY) window.scrollTo(0, lockedScrollY);
-                            if (performance.now() < pinUntil) requestAnimationFrame(pin);
-                        })();
-                    } else if (Math.abs(window.scrollY - lockedScrollY) > 1) {
-                        // вьюпорт мог «уползти» из-за бага Safari — возвращаем на место
-                        window.scrollTo(0, lockedScrollY);
-                    }
+                    // pinBody фиксирует позицию на момент открытия: повторный
+                    // вызов при открытии changelog поверх списка не должен
+                    // перезахватывать scrollY
+                    if (locked && !bodyPinned) pinBody();
+                    else if (!locked && bodyPinned) unpinBody();
                     return;
                 }
                 document.documentElement.classList.toggle('panel-lock', locked);
