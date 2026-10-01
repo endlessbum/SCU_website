@@ -209,16 +209,12 @@
 
             // Пока открыта панель (список версий или описание), основная страница
             // не прокручивается — скролл работает только внутри самой панели.
-            // На тач-устройствах фиксация body (position:fixed + top) не
-            // используется: вместе с fixed-панелью она провоцирует расхождение
-            // layout и visual viewport в iOS Safari/WebKit — белые полосы
-            // сверху и снизу экрана. Фон там блокируется средствами CSS:
-            // touch-action:none у подложки не даёт начать жест вне панели,
-            // touch-action:pan-y + overscroll-behavior:contain у панели гасят
-            // «протекание» скролла на страницу, а страховочные отмены
-            // touchmove/wheel ниже закрывают остальные случаи.
-            // На десктопе остаётся overflow:hidden у html: у него уже задан
-            // overflow-x, из-за него overflow на body не блокирует прокрутку.
+            // На мобильных не фиксируем body и не полагаемся на position:fixed
+            // для полноэкранного слоя: Safari на iOS 26 имеет регрессии вокруг
+            // dynamic/visual viewport для fixed-элементов. Мобильная панель
+            // позиционируется относительно текущего scrollY + visualViewport,
+            // а фон отдельно блокируется touchmove/touch-action.
+            // На десктопе остаётся overflow:hidden у html.
             var touchDevice = window.matchMedia('(hover: none) and (pointer: coarse)');
 
             function anyPanelOpen() {
@@ -228,21 +224,89 @@
                 return !versions.contains(target) && !changelog.contains(target);
             }
 
-            // страховка для браузеров, где touch-action/overscroll-behavior
-            // не сработали (гибриды, старые WebKit)
+            // Мобильный скролл: жесты вне активной панели никогда не должны
+            // доходить до корневого скролла страницы. Внутри панели разрешаем
+            // нативный scroll, но на границах панели останавливаем цепочку
+            // scroll chaining к body.
+            var panelTouch = null;
+            var panelTouchStartY = 0;
+
+            document.addEventListener('touchstart', function (e) {
+                if (!anyPanelOpen() || e.touches.length !== 1) {
+                    panelTouch = null;
+                    return;
+                }
+                var target = e.target;
+                panelTouch = versions.contains(target) ? versions
+                    : changelog.contains(target) ? changelog : null;
+                panelTouchStartY = e.touches[0].clientY;
+            }, { passive: true, capture: true });
+
             document.addEventListener('touchmove', function (e) {
-                if (!anyPanelOpen() || !outsidePanels(e.target)) return;
-                e.preventDefault();
-            }, { passive: false });
+                if (!anyPanelOpen() || e.touches.length !== 1) return;
+
+                // Жест начался вне панели — фон полностью заблокирован.
+                if (!panelTouch) {
+                    e.preventDefault();
+                    return;
+                }
+
+                var panel = panelTouch;
+                var maxScroll = Math.max(0, panel.scrollHeight - panel.clientHeight);
+                if (maxScroll <= 0) {
+                    e.preventDefault();
+                    return;
+                }
+
+                var dy = e.touches[0].clientY - panelTouchStartY;
+                var atTop = panel.scrollTop <= 0;
+                var atBottom = panel.scrollTop >= maxScroll - 1;
+
+                // Не отдаём overscroll панели корневой странице.
+                if ((dy > 0 && atTop) || (dy < 0 && atBottom)) {
+                    e.preventDefault();
+                }
+            }, { passive: false, capture: true });
+
+            document.addEventListener('touchend', function () {
+                panelTouch = null;
+            }, { passive: true, capture: true });
+
+            document.addEventListener('touchcancel', function () {
+                panelTouch = null;
+            }, { passive: true, capture: true });
 
             document.addEventListener('wheel', function (e) {
                 if (!anyPanelOpen() || !outsidePanels(e.target)) return;
                 e.preventDefault();
             }, { passive: false });
 
+            function syncMobilePanelGeometry() {
+                if (!touchDevice.matches) return;
+                var vv = window.visualViewport;
+                var top = (window.scrollY || window.pageYOffset || 0) + (vv ? vv.offsetTop : 0);
+                var height = vv ? vv.height : window.innerHeight;
+                if (!isFinite(top) || !isFinite(height) || height <= 0) return;
+
+                document.documentElement.style.setProperty('--panel-mobile-top', top + 'px');
+                document.documentElement.style.setProperty('--panel-mobile-height', height + 'px');
+            }
+
             function syncScrollLock() {
                 var locked = anyPanelOpen();
-                if (touchDevice.matches) return;
+                document.body.classList.toggle('panel-open', locked);
+
+                if (touchDevice.matches) {
+                    // На мобильных не используем overflow:hidden/position:fixed
+                    // для body/html: именно такие способы конфликтуют с dynamic
+                    // visual viewport Safari. Панели позиционируются отдельно,
+                    // а жесты фона блокируются через touchmove + touch-action.
+                    document.documentElement.classList.remove('panel-lock');
+                    document.body.style.paddingRight = '';
+                    if (locked) syncMobilePanelGeometry();
+                    return;
+                }
+
                 document.documentElement.classList.toggle('panel-lock', locked);
                 // компенсация ширины исчезнувшего скроллбара, чтобы контент не прыгал
                 if (locked) {
@@ -251,6 +315,13 @@
                 } else {
                     document.body.style.paddingRight = '';
                 }
+            }
+
+            window.addEventListener('resize', syncMobilePanelGeometry);
+            window.addEventListener('orientationchange', syncMobilePanelGeometry);
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', syncMobilePanelGeometry);
+                window.visualViewport.addEventListener('scroll', syncMobilePanelGeometry);
             }
 
             // фокус при открытии получает заголовок панели (tabindex="-1"),

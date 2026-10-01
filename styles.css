@@ -312,6 +312,13 @@ a { color: inherit; text-decoration: none; }
    overflow на body не распространяется на прокрутку страницы */
 html.panel-lock { overflow: hidden; }
 
+body.panel-open {
+    overscroll-behavior: none;
+}
+body.panel-open > :not(.versions-overlay):not(.side-panel) {
+    touch-action: none;
+}
+
 .side-panel {
     position: fixed;
     /* растяжение по вьюпорту через top+bottom, а не height:100%:
@@ -326,6 +333,7 @@ html.panel-lock { overflow: hidden; }
        где он покрывает весь экран. 1% неотличим глазу */
     background: rgba(255, 255, 255, .99);
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     /* прокрутка не «протекает» из панели на основную страницу, когда
        содержимое панели закончилось */
     overscroll-behavior: contain;
@@ -501,6 +509,21 @@ html.panel-lock { overflow: hidden; }
 
     :root { --panel-w: 86vw; }
     .nav { align-items: flex-start; }
+    /*
+       На iOS 26 Safari/WebKit полноэкранные position:fixed-слои могут
+       временно якориться к неверной высоте visual viewport, из-за чего
+       появляются белые полосы сверху/снизу. На мобильных панели и подложка
+       становятся absolute-слоями в текущей позиции документа; геометрия
+       задаётся из visualViewport в app.js.
+    */
+    .versions-overlay,
+    .side-panel {
+        position: absolute;
+        top: calc(var(--panel-mobile-top, 0px) - 2px);
+        bottom: auto;
+        height: calc(var(--panel-mobile-height, 100vh) + 4px);
+    }
+
     .changelog-panel { left: 0; width: 100%; z-index: 90; }
     /* с viewport-fit=cover контент панели у края экрана не должен уходить под
        вырез в ландшафте; env() = 0 там, где выреза нет, max() сохраняет
