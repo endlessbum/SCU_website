@@ -3,7 +3,7 @@
         var VERSIONS = [
             {
                 num: "3.1.1",
-                date: "30.09.2026",
+                date: "1.10.2026",
                 sections: [
                     {
                         title: "Меню и навигация",
@@ -209,10 +209,53 @@
 
             // Пока открыта панель (список версий или описание), основная страница
             // не прокручивается — скролл работает только внутри самой панели.
+            // На тач-устройствах (iOS) переключение overflow у корня ломает
+            // отрисовку визуального вьюпорта: страница остаётся со «залипшими»
+            // белыми полосами сверху и снизу даже после закрытия панели
+            // (баг Safari 26, bugs.webkit.org/show_bug.cgi?id=297779).
+            // Поэтому там скролл блокируется отменой touchmove/wheel вне панелей,
+            // а класс с overflow:hidden остаётся только для десктопа.
             // Класс вешается на html: у html задан overflow-x, из-за него
             // overflow на body не блокирует прокрутку страницы.
+            var touchDevice = window.matchMedia('(hover: none) and (pointer: coarse)');
+            var lockedScrollY = 0;
+
+            function anyPanelOpen() {
+                return versions.classList.contains('open') || changelog.classList.contains('open');
+            }
+            function outsidePanels(target) {
+                return !versions.contains(target) && !changelog.contains(target);
+            }
+
+            document.addEventListener('touchmove', function (e) {
+                if (!anyPanelOpen() || !outsidePanels(e.target)) return;
+                e.preventDefault();
+            }, { passive: false });
+
+            document.addEventListener('wheel', function (e) {
+                if (!anyPanelOpen() || !outsidePanels(e.target)) return;
+                e.preventDefault();
+            }, { passive: false });
+
             function syncScrollLock() {
-                var locked = versions.classList.contains('open') || changelog.classList.contains('open');
+                var locked = anyPanelOpen();
+                if (touchDevice.matches) {
+                    if (locked) {
+                        lockedScrollY = window.scrollY;
+                        // гасим инерционный скролл, запущенный жестом, которым
+                        // открыли панель: он иначе доскроллит страницу «под» панелью
+                        var pinUntil = performance.now() + 450;
+                        (function pin() {
+                            if (!anyPanelOpen()) return;
+                            if (window.scrollY !== lockedScrollY) window.scrollTo(0, lockedScrollY);
+                            if (performance.now() < pinUntil) requestAnimationFrame(pin);
+                        })();
+                    } else if (Math.abs(window.scrollY - lockedScrollY) > 1) {
+                        // вьюпорт мог «уползти» из-за бага Safari — возвращаем на место
+                        window.scrollTo(0, lockedScrollY);
+                    }
+                    return;
+                }
                 document.documentElement.classList.toggle('panel-lock', locked);
                 // компенсация ширины исчезнувшего скроллбара, чтобы контент не прыгал
                 if (locked) {
