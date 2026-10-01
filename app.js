@@ -209,19 +209,17 @@
 
             // Пока открыта панель (список версий или описание), основная страница
             // не прокручивается — скролл работает только внутри самой панели.
-            // На тач-устройствах страница обездвиживается фиксацией body
-            // (position:fixed с компенсацией top): документ перестаёт переполнять
-            // вьюпорт, поэтому скролл фона и «резинка» overscroll невозможны
-            // в принципе, а восстановление позиции не требует цикла scrollTo,
-            // раскачивающего вьюпорт. Класс с overflow:hidden у корня здесь не
-            // используется: на iOS он ломает отрисовку визуального вьюпорта —
-            // остаются «залипшие» белые полосы сверху и снизу даже после
-            // закрытия панели (баг Safari 26, bugs.webkit.org/show_bug.cgi?id=297779).
+            // На тач-устройствах фиксация body (position:fixed + top) не
+            // используется: вместе с fixed-панелью она провоцирует расхождение
+            // layout и visual viewport в iOS Safari/WebKit — белые полосы
+            // сверху и снизу экрана. Фон там блокируется средствами CSS:
+            // touch-action:none у подложки не даёт начать жест вне панели,
+            // touch-action:pan-y + overscroll-behavior:contain у панели гасят
+            // «протекание» скролла на страницу, а страховочные отмены
+            // touchmove/wheel ниже закрывают остальные случаи.
             // На десктопе остаётся overflow:hidden у html: у него уже задан
             // overflow-x, из-за него overflow на body не блокирует прокрутку.
             var touchDevice = window.matchMedia('(hover: none) and (pointer: coarse)');
-            var lockedScrollY = 0;
-            var bodyPinned = false;
 
             function anyPanelOpen() {
                 return versions.classList.contains('open') || changelog.classList.contains('open');
@@ -230,8 +228,8 @@
                 return !versions.contains(target) && !changelog.contains(target);
             }
 
-            // страховка для не-тачных жестов (колесо мыши на гибридах) и для
-            // браузеров, где media query выше не сработал
+            // страховка для браузеров, где touch-action/overscroll-behavior
+            // не сработали (гибриды, старые WebKit)
             document.addEventListener('touchmove', function (e) {
                 if (!anyPanelOpen() || !outsidePanels(e.target)) return;
                 e.preventDefault();
@@ -242,32 +240,9 @@
                 e.preventDefault();
             }, { passive: false });
 
-            function pinBody() {
-                lockedScrollY = window.scrollY;
-                document.body.style.position = 'fixed';
-                document.body.style.top = -lockedScrollY + 'px';
-                document.body.style.width = '100%';
-                bodyPinned = true;
-            }
-
-            function unpinBody() {
-                document.body.style.position = '';
-                document.body.style.top = '';
-                document.body.style.width = '';
-                bodyPinned = false;
-                window.scrollTo(0, lockedScrollY);
-            }
-
             function syncScrollLock() {
                 var locked = anyPanelOpen();
-                if (touchDevice.matches) {
-                    // pinBody фиксирует позицию на момент открытия: повторный
-                    // вызов при открытии changelog поверх списка не должен
-                    // перезахватывать scrollY
-                    if (locked && !bodyPinned) pinBody();
-                    else if (!locked && bodyPinned) unpinBody();
-                    return;
-                }
+                if (touchDevice.matches) return;
                 document.documentElement.classList.toggle('panel-lock', locked);
                 // компенсация ширины исчезнувшего скроллбара, чтобы контент не прыгал
                 if (locked) {

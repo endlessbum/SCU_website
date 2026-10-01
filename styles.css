@@ -305,8 +305,8 @@ a { color: inherit; text-decoration: none; }
 .versions-overlay.open { opacity: 1; pointer-events: auto; }
 
 /* открытая панель блокирует скролл основной страницы (класс ставит app.js
-   только на десктопе — на тач-устройствах страница обездвиживается там
-   фиксацией body, потому что overflow:hidden у корня ломает отрисовку
+   только на десктопе — на тач-устройствах фон блокируется touch-action и
+   overscroll-behavior, потому что overflow:hidden у корня ломает отрисовку
    визуального вьюпорта в Safari: остаются «залипшие» белые полосы сверху
    и снизу). Вешается на html: у html уже задан overflow-x, из-за него
    overflow на body не распространяется на прокрутку страницы */
@@ -314,8 +314,12 @@ html.panel-lock { overflow: hidden; }
 
 .side-panel {
     position: fixed;
+    /* растяжение по вьюпорту через top+bottom, а не height:100%:
+       панель гарантированно занимает весь экран и следует за изменениями
+       layout viewport (тулбар Safari), не оставляя щелей сверху и снизу */
     top: 0;
-    height: 100%;
+    bottom: 0;
+    height: auto;
     background: #fff;
     overflow-y: auto;
     /* прокрутка не «протекает» из панели на основную страницу, когда
@@ -494,6 +498,17 @@ html.panel-lock { overflow: hidden; }
     :root { --panel-w: 86vw; }
     .nav { align-items: flex-start; }
     .changelog-panel { left: 0; width: 100%; z-index: 90; }
+    /* с viewport-fit=cover контент панели у края экрана не должен уходить под
+       вырез в ландшафте; env() = 0 там, где выреза нет, max() сохраняет
+       базовый отступ правила выше */
+    .versions-panel {
+        padding-left: max(26px, env(safe-area-inset-left));
+        padding-right: max(26px, env(safe-area-inset-right));
+    }
+    .changelog-panel {
+        padding-left: max(28px, env(safe-area-inset-left));
+        padding-right: max(28px, env(safe-area-inset-right));
+    }
 }
 
 @keyframes carousel {
