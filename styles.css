@@ -1,9 +1,26 @@
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; background: #fff; color: #000; overflow-x: hidden; overflow-x: clip; }
+/* overscroll-behavior:none у корня гасит упругий overscroll документа:
+   в Safari 26 (Liquid Glass) «резинка» уносит прокрутку за реальный конец
+   страницы — в белую пустоту ниже футера */
+html {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #000;
+    overflow-x: hidden;
+    overflow-x: clip;
+    overscroll-behavior-y: none;
+}
+/* без overflow-x на body: вместе с видимым overflow-y он делает body
+   самостоятельным scroll-контейнером, что провоцирует баги прокрутки
+   в iOS; горизонталь и так обрезается clip у html */
 body {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    color: #000;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
 }
 img { display: block; height: auto; }
 a { color: inherit; text-decoration: none; }
