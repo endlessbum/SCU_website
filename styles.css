@@ -1,12 +1,54 @@
 *, *::before, *::after { box-sizing: border-box; }
+/* ---------- ПАЛИТРА ----------
+   Светлые значения по умолчанию, тёмные — в
+   @media (prefers-color-scheme: dark) ниже; тёмная тема включается
+   автоматически по системной настройке, без переключателя */
+:root {
+    --bg: #fff;
+    --text: #000;
+    --text-strong: #444444;
+    --text-secondary: #767676;
+    --surface: #eeeeee;
+    --surface-raised: #fff;
+    --panel-bg: rgba(255, 255, 255, .99);
+    --hover-wash: #f5f5f5;
+    --code-bg: #f2f2f2;
+    --border: #e2e2e2;
+    --border-strong: #dcdcdc;
+    --accent: #1C5FF6;
+    --btn-solid-bg: #444444;
+    --btn-solid-text: #fff;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #1F1F1F;
+        --text: #f5f5f5;
+        --text-strong: #e3e3e3;
+        --text-secondary: #9a9a9a;
+        --surface: #1F1F1F;
+        --surface-raised: #2B2B2B;
+        --panel-bg: rgba(35, 35, 37, .99);
+        --hover-wash: #2a2a2c;
+        --code-bg: #303032;
+        --border: #343436;
+        --border-strong: #48484a;
+        --btn-solid-bg: #f2f2f2;
+        --btn-solid-text: #111112;
+    }
+    /* иконки на «перевёрнутых» тёмных кнопках — тёмные */
+    .btn-source img,
+    .btn-download img { filter: brightness(0); }
+    /* на синем hover-е иконки снова светлые */
+    .btn-download:hover img { filter: brightness(0) invert(1); }
+}
 /* overscroll-behavior:none у корня гасит упругий overscroll документа:
    в Safari 26 (Liquid Glass) «резинка» уносит прокрутку за реальный конец
    страницы — в белую пустоту ниже футера */
 html {
     margin: 0;
     padding: 0;
-    background: #fff;
-    color: #000;
+    background: var(--bg);
+    color: var(--text);
     overflow-x: hidden;
     overflow-x: clip;
     overscroll-behavior-y: none;
@@ -17,14 +59,14 @@ html {
 body {
     margin: 0;
     padding: 0;
-    background: #fff;
-    color: #000;
+    background: var(--bg);
+    color: var(--text);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
 }
 img { display: block; height: auto; }
 a { color: inherit; text-decoration: none; }
-::selection { background: #1C5FF6; color: #fff; }
+::selection { background: var(--accent); color: #fff; }
 :focus-visible { outline: 2px solid #1C5FF6; outline-offset: 2px; }
 
 
@@ -37,9 +79,9 @@ a { color: inherit; text-decoration: none; }
     font-size: 16px;
     line-height: 20px;
 }
-.nav-date { color: #767676; }
+.nav-date { color: var(--text-secondary); }
 .nav-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-.nav-stat { color: #767676; opacity: 0; transition: opacity .3s ease; }
+.nav-stat { color: var(--text-secondary); opacity: 0; transition: opacity .3s ease; }
 .nav-stat.visible { opacity: 1; }
 .nav-date, .nav-stat { display: inline-flex; align-items: center; gap: 5px; }
 
@@ -68,14 +110,14 @@ a { color: inherit; text-decoration: none; }
     line-height: 75px;
     font-weight: 700;
     letter-spacing: -0.025em;
-    color: #444444;
+    color: var(--text-strong);
 }
 .hero .sub {
     margin: 14px 0 0;
     font-size: 28px;
     line-height: 36px;
     font-weight: 400;
-    color: #7a7a7a;
+    color: var(--text-secondary);
     letter-spacing: -0.005em;
 }
 
@@ -96,7 +138,7 @@ a { color: inherit; text-decoration: none; }
     width: 1.6em;
     height: .75em;
     border-radius: 999px;
-    background: #444444;
+    background: var(--btn-solid-bg);
     opacity: 0;
     transform: translate(-50%, -50%) scale(.4);
     transition: opacity .45s ease, transform .45s ease, background-color .35s ease;
@@ -143,8 +185,8 @@ a { color: inherit; text-decoration: none; }
 /* Hover: label rolls up, thin subtitle rolls in from below, icon stays still.
    Both layers are stacked in one grid cell, so the block width (and the icon
    position) is the same in normal and hover state. */
-.btn-flip { display: inline-grid; text-align: center; }
-.btn-roll { grid-area: 1 / 1; height: 20px; overflow: hidden; }
+.btn-flip { display: inline-grid; text-align: center; height: 20px; transition: height .25s ease; }
+.btn-roll { grid-area: 1 / 1; overflow: hidden; }
 .btn-label,
 .btn-sub {
     display: block;
@@ -155,11 +197,17 @@ a { color: inherit; text-decoration: none; }
 .btn-sub { font-size: 11px; font-weight: 300; opacity: 0; transform: translateY(20px); }
 .btn:hover .btn-label { transform: translateY(-20px); opacity: 0; }
 .btn:hover .btn-sub { transform: translateY(0); opacity: .8; }
+/* Кнопка скачивания: подзаголовок из двух строк — «Windows 11 x64»,
+   размер файла под ним; окно подзаголовка на hover раскрывается до 40px */
+.btn-download .btn-sub { height: 40px; transform: translateY(40px); }
+.btn-download:hover .btn-flip { height: 40px; }
+.btn-download:hover .btn-label { transform: translateY(-40px); }
+.btn-download:hover .btn-sub { transform: translateY(0); }
 
-.btn-download { width: 200px; background: #444444; color: #fff; transition: transform .15s ease, opacity .15s ease, background-color .15s ease; }
+.btn-download { width: 200px; background: var(--btn-solid-bg); color: var(--btn-solid-text); transition: transform .15s ease, opacity .15s ease, background-color .15s ease, color .15s ease; }
 .btn-download img { margin-top: -2px; }
-/* Hover: black fill changes to the app icon color */
-.btn-download:hover { background-color: #1C5FF6; }
+/* Hover: solid fill changes to the app icon color */
+.btn-download:hover { background-color: var(--accent); color: #fff; }
 
 .badges { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 14px; }
 .vt-badge, .win-badge { display: inline-block; transition: transform .15s ease, opacity .15s ease; }
@@ -169,29 +217,33 @@ a { color: inherit; text-decoration: none; }
 
 .btn-source {
     width: 200px;
-    background: #fff;
-    color: #363636;
-    border: 1.5px solid #dcdcdc;
+    background: var(--surface-raised);
+    color: var(--text-strong);
+    border: 1.5px solid var(--border-strong);
     transition: transform .15s ease, opacity .15s ease, background-color .15s ease, border-color .15s ease, color .15s ease;
 }
-.btn-source:hover { background-color: #1C5FF6; border-color: #1C5FF6; color: #fff; }
+.btn-source:hover { background-color: var(--accent); border-color: var(--accent); color: #fff; }
 .btn-source:hover img { filter: brightness(0) invert(1); }
 
 .hero-image { margin: 8px auto 0; max-width: 1600px; overflow: hidden; }
-/* never narrower than 1300px: on smaller desktop windows the sides crop instead of shrinking */
-.hero-image img { width: max(100%, 1300px); height: auto; margin-left: 50%; transform: translateX(-50%); }
+/* never narrower than 1150px: on smaller desktop windows the sides crop instead of shrinking */
+.hero-image img { width: max(100%, 1150px); height: auto; margin-left: 50%; transform: translateX(-50%); }
 
 /* ---------- ЦЕЛЬ ---------- */
 .purpose { display: flex; margin-top: 122px; }
-.gallery { position: relative; width: 50%; overflow: hidden; }
-.gallery-track { position: absolute; inset: 0; display: flex; flex-direction: column; }
-.gallery-track picture { flex: 1 1 0; min-height: 0; }
+/* Минимальная высота колонки задаётся самими картинками: у каждой
+   aspect-ratio 1920×1032, у трека — колонка из трёх скриншотов. Если текст
+   справа длиннее, флекс растягивает колонки на одинаковую высоту, а излишек
+   кадрируется object-fit: cover. Высота больше не зависит только от текста */
+.gallery { position: relative; width: 50%; overflow: hidden; display: flex; }
+.gallery-track { position: static; display: flex; flex-direction: column; width: 100%; }
+.gallery-track picture { flex: 1 1 auto; aspect-ratio: 1920 / 1032; min-height: 0; }
 .gallery-track picture img { width: 100%; height: 100%; object-fit: cover; }
 .gallery-track picture.dup { display: none; }
 
 .info {
     width: 50%;
-    background: #eeeeee;
+    background: var(--surface);
     padding: 73px 60px 73px 100px;
 }
 .label {
@@ -200,7 +252,7 @@ a { color: inherit; text-decoration: none; }
     line-height: 16px;
     font-weight: 700;
     letter-spacing: 0.02em;
-    color: #767676;
+    color: var(--text-secondary);
     text-transform: uppercase;
 }
 .info h2 {
@@ -215,7 +267,7 @@ a { color: inherit; text-decoration: none; }
     margin: 0 0 20px;
     font-size: 16px;
     line-height: 22px;
-    color: #6b6b6b;
+    color: var(--text-secondary);
 }
 .copy p:last-child { margin-bottom: 0; }
 
@@ -231,15 +283,15 @@ a { color: inherit; text-decoration: none; }
     height: 42px;
     padding-left: 11px;
     font-size: 14px;
-    border-bottom: 1px solid #e2e2e2;
+    border-bottom: 1px solid var(--border);
 }
 .features li:last-child { border-bottom: 0; }
 .features .group {
-    color: #2B2B2B;
+    color: var(--text-strong);
     font-weight: 600;
 }
 .features .sub {
-    color: #202020;
+    color: var(--text);
     padding-left: 27px;
 }
 
@@ -256,24 +308,7 @@ a { color: inherit; text-decoration: none; }
 .footer-brand img { width: 79px; height: 79px; }
 .footer-brand span { font-size: 30px; line-height: 36px; font-weight: 500; letter-spacing: -0.01em; }
 
-/* ---------- ПОДДЕРЖКА ---------- */
-.support {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    padding: 0 20px 70px;
-}
-.support img { width: 200px; height: 200px; }
-.support .support-qr img { transition: transform .15s ease; }
-.support .support-qr:hover img { transform: scale(1.03); }
-.support a {
-    font-size: 15px;
-    line-height: 20px;
-    color: #444444;
-    transition: color .15s ease;
-}
-.support a:hover { color: #1C5FF6; }
+/* ссылка «поддержка» живёт в строке .legal вместе с политикой */
 
 .legal {
     margin: 0;
@@ -281,11 +316,10 @@ a { color: inherit; text-decoration: none; }
     text-align: center;
     font-size: 12px;
     line-height: 16px;
-    color: #767676;
-    border-top: 1px dotted #eeeeee;
+    color: var(--text-secondary);
 }
 .legal a { color: inherit; transition: color .15s ease; }
-.legal a:hover { color: #1C5FF6; }
+.legal a:hover { color: var(--accent); }
 
 /* ---------- ВЕРСИИ (выдвижные панели) ---------- */
 :root { --panel-w: 320px; }
@@ -300,10 +334,10 @@ a { color: inherit; text-decoration: none; }
     font: inherit;
     font-size: 16px;
     line-height: 20px;
-    color: #767676;
+    color: var(--text-secondary);
     transition: color .15s ease;
 }
-.versions-toggle:hover { color: #1C5FF6; }
+.versions-toggle:hover { color: var(--accent); }
 .toggle-arrow { transition: transform .25s ease; }
 .versions-toggle[aria-expanded="true"] .toggle-arrow { transform: rotate(180deg); }
 
@@ -344,11 +378,10 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
     top: 0;
     bottom: 0;
     height: auto;
-    /* rgba(...,.99), а не #fff: в Safari 26 iOS полностью непрозрачные
-       fixed-слои клиппаются у краёв экрана — остаются белые полосы сверху
-       и снизу; доля прозрачности уводит слой на другой путь композитинга,
-       где он покрывает весь экран. 1% неотличим глазу */
-    background: rgba(255, 255, 255, .99);
+    /* rgba с долей прозрачности (см. комментарий в :root): в Safari 26 iOS
+       полностью непрозрачные fixed-слои клиппаются у краёв экрана — остаются
+       белые полосы сверху и снизу; 1% неотличим глазу */
+    background: var(--panel-bg);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     /* прокрутка не «протекает» из панели на основную страницу, когда
@@ -387,8 +420,8 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
 
 .panel-head { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
 .panel-head .panel-titles { flex: 1; min-width: 0; }
-.panel-title { margin: 0; font-size: 18px; line-height: 23px; font-weight: 600; letter-spacing: -0.01em; color: #444444; }
-.panel-sub { margin: 3px 0 0; font-size: 12px; line-height: 16px; color: #767676; }
+.panel-title { margin: 0; font-size: 18px; line-height: 23px; font-weight: 600; letter-spacing: -0.01em; color: var(--text-strong); }
+.panel-sub { margin: 3px 0 0; font-size: 12px; line-height: 16px; color: var(--text-secondary); }
 .panel-back {
     flex: none;
     display: inline-flex;
@@ -397,12 +430,12 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
     background: none;
     font-size: 20px;
     line-height: 1;
-    color: #444444;
+    color: var(--text-strong);
     padding: 2px 6px 2px 0;
     transition: color .15s ease;
 }
 .panel-back .icon { width: 16px; height: 16px; }
-.panel-back:hover { color: #1C5FF6; }
+.panel-back:hover { color: var(--accent); }
 .panel-close {
     flex: none;
     display: inline-flex;
@@ -411,12 +444,12 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
     background: none;
     font-size: 26px;
     line-height: 1;
-    color: #767676;
+    color: var(--text-secondary);
     padding: 0 2px 4px 6px;
     transition: color .15s ease;
 }
 .panel-close .icon { width: 14px; height: 14px; }
-.panel-close:hover { color: #444444; }
+.panel-close:hover { color: var(--text-strong); }
 
 .version-item {
     display: flex;
@@ -426,22 +459,22 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
     text-align: left;
     padding: 14px 12px;
     border: 0;
-    border-bottom: 1px solid #e2e2e2;
+    border-bottom: 1px solid var(--border);
     background: none;
     font: inherit;
     transition: background-color .15s ease;
 }
-.version-item:hover { background: #f5f5f5; }
-.version-item .version-num { font-size: 15px; line-height: 20px; font-weight: 600; color: #444444; }
-.version-item .version-date { font-size: 12px; line-height: 16px; color: #767676; }
+.version-item:hover { background: var(--hover-wash); }
+.version-item .version-num { font-size: 15px; line-height: 20px; font-weight: 600; color: var(--text-strong); }
+.version-item .version-date { font-size: 12px; line-height: 16px; color: var(--text-secondary); }
 
-.changelog-body h3 { margin: 24px 0 8px; font-size: 14px; line-height: 19px; font-weight: 700; color: #444444; }
+.changelog-body h3 { margin: 24px 0 8px; font-size: 14px; line-height: 19px; font-weight: 700; color: var(--text-strong); }
 .changelog-body h3:first-child { margin-top: 0; }
 .changelog-body ul { margin: 0; padding-left: 18px; }
-.changelog-body li { margin: 0 0 8px; font-size: 13px; line-height: 19px; color: #767676; }
+.changelog-body li { margin: 0 0 8px; font-size: 13px; line-height: 19px; color: var(--text-secondary); }
 .changelog-body code {
     font-size: 12px;
-    background: #f2f2f2;
+    background: var(--code-bg);
     padding: 1px 5px;
     border-radius: 4px;
 }
@@ -456,7 +489,6 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
 /* ---------- MOBILE ---------- */
 @media (max-width: 768px) {
     .nav { padding: 20px 20px; line-height: 22px; }
-    .nav-date, .nav-stat { color: #767676; }
 
     .hero { padding-top: 60px; display: flex; flex-direction: column; padding-bottom: 20px; }
     .hero .buttons { order: 3; }
@@ -573,8 +605,8 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
     justify-content: center;
     border: none;
     border-radius: 999px;
-    background: #444444;
-    color: #fff;
+    background: var(--btn-solid-bg);
+    color: var(--btn-solid-text);
     box-shadow: 0 4px 16px rgba(0, 0, 0, .18);
     opacity: 0;
     visibility: hidden;
@@ -587,7 +619,7 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
     transform: translateY(0);
     transition: transform .35s cubic-bezier(.32, .72, .34, 1), opacity .35s ease, visibility 0s, background-color .15s ease;
 }
-.to-top:hover { background: #1C5FF6; }
+.to-top:hover { background: var(--accent); color: #fff; }
 .to-top svg { width: 20px; height: 20px; }
 .to-top:active { transform: translateY(0) scale(.94); }
 

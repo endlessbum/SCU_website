@@ -9,7 +9,8 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/static/compositor/favicon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/compositor/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1F1F1F">
     <link rel="canonical" href="https://safecleanup.vercel.app/privacy.html">
     <meta property="og:title" content="Политика конфиденциальности — SCU">
     <meta property="og:description" content="Какую информацию обрабатывает сайт SCU: подсчёт уникальных посетителей и загрузок без cookies, аналитики и рекламы.">
@@ -21,6 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+        :root { color-scheme: light dark; }
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; padding: 0; background: #fff; color: #000; }
         body {
@@ -40,6 +42,7 @@
         }
         .top .back { color: #444444; transition: color .15s ease; }
         .top .back:hover { color: #1C5FF6; }
+        .brand { font-weight: 600; color: #444444; }
 
         .page {
             max-width: 720px;
@@ -82,13 +85,25 @@
             font-size: 12px;
             line-height: 16px;
             color: #b5b5b5;
-            border-top: 1px dotted #eeeeee;
         }
 
         @media (max-width: 768px) {
             .top { padding: 20px 20px 0; }
             .page { padding: 46px 22px 70px; }
             h1 { font-size: 30px; line-height: 36px; }
+        }
+
+        /* ---------- ТЁМНАЯ ТЕМА (авто по системной) ---------- */
+        @media (prefers-color-scheme: dark) {
+            html, body { background: #1F1F1F; color: #f5f5f5; }
+            .top .back, .brand { color: #e3e3e3; }
+            h1, h2 { color: #e3e3e3; }
+            .updated { color: #9a9a9a; }
+            p, li { color: #a8a8a8; }
+            code { background: #303032; }
+            .legal { color: #8f8f8f; }
+            .to-top { background: #f2f2f2; color: #111111; }
+            .to-top:hover { background: #1C5FF6; color: #fff; }
         }
 
         .to-top {
@@ -130,14 +145,14 @@
 
     <div class="top">
         <a class="back" href="/">← На главную</a>
-        <span style="font-weight: 600; color: #444444;">SCU</span>
+        <span class="brand">SCU</span>
     </div>
 
     <div class="page">
         <h1>Политика конфиденциальности</h1>
         <p class="updated">Обновлено: 30.09.2026</p>
 
-        <p>Эта политика честно описывает, что происходит с данными, когда вы открываете сайт SCU и пользуетесь им. Коротко: сайт не знает о вас почти ничего, и это не преувеличение.</p>
+        <p>Эта политика честно описывает, что происходит с данными, когда вы открываете сайт SCU и пользуетесь им. Коротко: сайт не знает о вас почти ничего.</p>
 
         <h2>Что собирается</h2>
         <p>При открытии страницы и при нажатии кнопки «Скачать» сервер получает технические данные вашего запроса: IP-адрес и строку User-Agent (их передаёт любой браузер при любом запросе к любому сайту). Дальше происходит следующее:</p>

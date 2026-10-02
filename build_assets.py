@@ -62,8 +62,7 @@ paste_with_shadow(scaled('Настройки.png', 1100), (CANVAS_W - 1100 + 140
 paste_with_shadow(scaled('Бэнчмарк.png', 1200), (868, 950))
 
 rgb = canvas.convert('RGB')
-# сайт подключает webp через <picture>; png используется как fallback и og:image
-rgb.save(os.path.join(ROOT, 'static', 'compositor', 'hero.png'))
+# сайт подключает hero.webp напрямую; png-версия не собирается
 rgb.save(os.path.join(ROOT, 'static', 'compositor', 'hero.webp'),
          'WEBP', quality=90, method=6)
 

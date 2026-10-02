@@ -3,7 +3,7 @@
         var VERSIONS = [
             {
                 num: "3.1.1",
-                date: "1.10.2026",
+                date: "01.10.2026",
                 sections: [
                     {
                         title: "Меню и навигация",
@@ -193,6 +193,17 @@
                 ]
             }
         ];
+
+        // Дата в навбаре = дата последнего релиза: единый источник — VERSIONS,
+        // при добавлении версии навбар обновляется сам. Статичный текст в HTML
+        // остаётся fallback'ом до загрузки скрипта.
+        (function () {
+            var el = document.querySelector('.nav-date');
+            if (!el || !VERSIONS.length) return;
+            el.textContent = VERSIONS[0].date;
+            var icon = el.querySelector('.icon');
+            if (icon) el.insertBefore(icon, el.firstChild);
+        })();
 
         (function () {
             var toggle = document.getElementById('versionsToggle');
@@ -530,28 +541,16 @@
                 await wait(MORPH_MS + WORD_PAUSE);
             }
 
-            // не крутим анимацию в фоновой вкладке и когда hero вне экрана
-            var inView = false, viewWaiters = [];
-            new IntersectionObserver(function (entries) {
-                inView = entries[0].isIntersecting;
-                if (inView) {
-                    viewWaiters.forEach(function (r) { r(); });
-                    viewWaiters = [];
-                }
-            }).observe(wrap);
-
+            // анимация крутится постоянно, в том числе когда hero прокручен
+            // из виду; пауза — только в скрытой вкладке
             function waitVisible() {
-                var promises = [];
-                if (document.hidden) {
-                    promises.push(new Promise(function (resolve) {
-                        document.addEventListener('visibilitychange', function onVis() {
-                            document.removeEventListener('visibilitychange', onVis);
-                            resolve();
-                        }, { once: true });
-                    }));
-                }
-                if (!inView) promises.push(new Promise(function (r) { viewWaiters.push(r); }));
-                return Promise.all(promises);
+                if (!document.hidden) return Promise.resolve();
+                return new Promise(function (resolve) {
+                    document.addEventListener('visibilitychange', function onVis() {
+                        document.removeEventListener('visibilitychange', onVis);
+                        resolve();
+                    }, { once: true });
+                });
             }
 
             (async function loop() {
@@ -560,24 +559,4 @@
                     await cycle();
                 }
             })();
-        })();
-
-        // Кнопка «наверх»: появляется, когда прокручена половина страницы.
-        (function () {
-            var btn = document.getElementById('toTop');
-            if (!btn) return;
-
-            function update() {
-                var max = document.documentElement.scrollHeight - window.innerHeight;
-                btn.classList.toggle('visible', max > 0 && window.scrollY >= max / 2);
-            }
-
-            btn.addEventListener('click', function () {
-                var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-            });
-
-            window.addEventListener('scroll', update, { passive: true });
-            window.addEventListener('resize', update);
-            update();
         })();

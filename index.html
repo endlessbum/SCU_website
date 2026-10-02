@@ -18,7 +18,8 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/static/compositor/favicon-192.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/static/compositor/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1F1F1F">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -33,7 +34,7 @@
     <nav class="nav">
         <button class="versions-toggle" id="versionsToggle" aria-expanded="false" aria-controls="versionsPanel">Версии <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></button>
         <div class="nav-meta">
-            <span class="nav-date"><span class="icon icon-refresh" aria-hidden="true"></span>28.09.2026</span>
+            <span class="nav-date"><span class="icon icon-refresh" aria-hidden="true"></span>01.10.2026</span>
             <span class="nav-stat" id="statVisits"><span class="icon icon-eye" aria-hidden="true"></span><span class="stat-value">—</span></span>
             <span class="nav-stat" id="statDownloads"><span class="icon icon-download" aria-hidden="true"></span><span class="stat-value">—</span></span>
         </div>
@@ -46,7 +47,7 @@
         <p class="sub">Множество скриптов в одном файле</p>
 
         <div class="buttons">
-            <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v3.1.1/SCU_Setup_3.1.1.exe"><img src="static/compositor/windows-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Скачать</span></span><span class="btn-roll"><span class="btn-sub">Windows 11 x64</span></span></span></a>
+            <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v3.1.1/SCU_Setup_3.1.1.exe"><img src="static/compositor/windows-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Скачать</span></span><span class="btn-roll"><span class="btn-sub">Windows 11 x64<br>66.2 МБ</span></span></span></a>
             <a class="btn btn-source" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="static/compositor/github-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Исходный код</span></span><span class="btn-roll"><span class="btn-sub">GitHub</span></span></span></a>
         </div>
 
@@ -60,10 +61,7 @@
         </div>
 
         <div class="hero-image">
-            <picture>
-                <source srcset="static/compositor/hero.webp" type="image/webp">
-                <img src="static/compositor/hero.png" width="2936" height="1443" fetchpriority="high" alt="Интерфейс приложения SCU">
-            </picture>
+            <img src="static/compositor/hero.webp" width="2936" height="1443" fetchpriority="high" alt="Интерфейс приложения SCU">
         </div>
     </header>
 
@@ -156,17 +154,10 @@
             <span>SCU</span>
         </div>
         <div class="buttons">
-            <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v3.1.1/SCU_Setup_3.1.1.exe"><img src="static/compositor/windows-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Скачать</span></span><span class="btn-roll"><span class="btn-sub">Windows 11 x64</span></span></span></a>
+            <a class="btn btn-download" href="https://github.com/endlessbum/SCU/releases/download/v3.1.1/SCU_Setup_3.1.1.exe"><img src="static/compositor/windows-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Скачать</span></span><span class="btn-roll"><span class="btn-sub">Windows 11 x64<br>66.2 МБ</span></span></span></a>
             <a class="btn btn-source" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="static/compositor/github-logo.svg" alt=""><span class="btn-flip"><span class="btn-roll"><span class="btn-label">Исходный код</span></span><span class="btn-roll"><span class="btn-sub">GitHub</span></span></span></a>
         </div>
     </footer>
-
-    <div class="support">
-        <a class="support-qr" href="https://finance.ozon.ru/apps/sbp/ozonbankpay/01a0dd12-3984-7158-aed9-fe1233abfb55" target="_blank" rel="noopener" aria-label="Поддержи проект">
-            <img src="static/compositor/qr-ozon.png" width="600" height="600" loading="lazy" decoding="async" alt="QR-код для поддержки проекта">
-        </a>
-        <a href="https://finance.ozon.ru/apps/sbp/ozonbankpay/01a0dd12-3984-7158-aed9-fe1233abfb55" target="_blank" rel="noopener">Поддержи проект!</a>
-    </div>
 
     <div class="versions-overlay" id="versionsOverlay"></div>
 
@@ -189,16 +180,14 @@
         <div class="changelog-body" id="changelogBody"></div>
     </aside>
 
-    <p class="legal">SCU не связан ни с одной компанией · <a href="/privacy.html">Политика конфиденциальности</a></p>
+    <p class="legal">SCU не связан ни с одной компанией · <a href="https://finance.ozon.ru/apps/sbp/ozonbankpay/01a0dd12-3984-7158-aed9-fe1233abfb55" target="_blank" rel="noopener">поддержка</a> · <a href="/privacy.html">политика конфиденциальности</a></p>
 
     <button class="to-top" id="toTop" aria-label="Наверх">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
 
-        <script src="app.js" defer></script>
-        <script src="cursor.js" defer></script>
-
-
-
+    <script src="app.js" defer></script>
+    <script src="cursor.js" defer></script>
+    <script src="to-top.js" defer></script>
 </body>
 </html>
