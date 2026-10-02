@@ -200,8 +200,10 @@
         (function () {
             var el = document.querySelector('.nav-date');
             if (!el || !VERSIONS.length) return;
-            el.textContent = VERSIONS[0].date;
+            // иконку нужно спасти ДО перезаписи textContent — иначе она
+            // стирается вместе со старым текстом
             var icon = el.querySelector('.icon');
+            el.textContent = VERSIONS[0].date;
             if (icon) el.insertBefore(icon, el.firstChild);
         })();
 
