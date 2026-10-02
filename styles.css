@@ -578,9 +578,8 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
     }
 
     .changelog-panel { left: 0; width: 100%; z-index: 90; }
-    /* с viewport-fit=cover контент панели у края экрана не должен уходить под
-       вырез в ландшафте; env() = 0 там, где выреза нет, max() сохраняет
-       базовый отступ правила выше */
+    /* env() без viewport-fit=cover на странице всегда 0 — max() сохраняет
+       базовый отступ правила выше (задел, если cover вернётся) */
     .versions-panel {
         padding-left: max(26px, env(safe-area-inset-left));
         padding-right: max(26px, env(safe-area-inset-right));

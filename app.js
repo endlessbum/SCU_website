@@ -243,6 +243,7 @@
             // scroll chaining к body.
             var panelTouch = null;
             var panelTouchStartY = 0;
+            var mobileGeoResetTimer = null;
 
             document.addEventListener('touchstart', function (e) {
                 if (!anyPanelOpen() || e.touches.length !== 1) {
@@ -295,11 +296,24 @@
             }, { passive: false });
 
             function syncMobilePanelGeometry() {
-                if (!touchDevice.matches) return;
+                // Геометрия нужна только открытой панели: закрытые слои
+                // невидимы, а их absolute-позиция влияет на прокручиваемую
+                // высоту документа (см. clamp ниже)
+                if (!touchDevice.matches || !anyPanelOpen()) return;
                 var vv = window.visualViewport;
                 var top = (window.scrollY || window.pageYOffset || 0) + (vv ? vv.offsetTop : 0);
                 var height = vv ? vv.height : window.innerHeight;
                 if (!isFinite(top) || !isFinite(height) || height <= 0) return;
+
+                // Скрытые absolute-слои добавляют документу прокручиваемую
+                // высоту, если их низ уходит ниже конца контента. В iOS 26
+                // visualViewport выдаёт мусорные offsetTop (WebKit bug 297779),
+                // из-за чего панель уезжала за футер и страница получала
+                // «бесконечную» прокрутку вниз. Жёстко ограничиваем низ слоёв
+                // концом документа (+4px — запас на стык из media-правила)
+                var maxBottom = document.documentElement.scrollHeight + 4;
+                if (top + height > maxBottom) top = maxBottom - height;
+                if (top < 0) top = 0;
 
                 document.documentElement.style.setProperty('--panel-mobile-top', top + 'px');
                 document.documentElement.style.setProperty('--panel-mobile-height', height + 'px');
@@ -316,7 +330,20 @@
                     // а жесты фона блокируются через touchmove + touch-action.
                     document.documentElement.classList.remove('panel-lock');
                     document.body.style.paddingRight = '';
-                    if (locked) syncMobilePanelGeometry();
+                    clearTimeout(mobileGeoResetTimer);
+                    if (locked) {
+                        syncMobilePanelGeometry();
+                    } else {
+                        // После закрытия возвращаем скрытые absolute-слои к верху
+                        // документа (чуть позже конца слайда .35s): оставленная
+                        // у нижней границы геометрия добавляла бы документу
+                        // прокручиваемую высоту ниже футера
+                        mobileGeoResetTimer = setTimeout(function () {
+                            if (anyPanelOpen()) return;
+                            document.documentElement.style.setProperty('--panel-mobile-top', '0px');
+                            document.documentElement.style.setProperty('--panel-mobile-height', '100vh');
+                        }, 450);
+                    }
                     return;
                 }
 
