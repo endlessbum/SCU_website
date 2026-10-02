@@ -479,6 +479,54 @@
             })();
         })();
 
+        // Страховка упругого overscroll: в Safari 26 (Liquid Glass) «резинка»
+        // у корневого скролла не имеет жёсткого предела — жест с инерцией
+        // уносит прокрутку далеко за реальный конец страницы. Гасить
+        // overscroll-behavior целиком нельзя (нужна амортизация у краёв),
+        // поэтому ограничиваем амплитуду: пока смещение за границей меньше
+        // лимита, нативная резинка работает как обычно; за лимитом прокрутка
+        // возвращается на границу, а застрявшая после жеста — подтягивается
+        // к границе по его окончании.
+        (function () {
+            var LIMIT_RATIO = 0.75; // больше любого нативного растяжения резинки
+            var touchActive = false;
+            var settleTimer = null;
+            var clamped = false;
+
+            function scrollY() { return window.scrollY || window.pageYOffset || 0; }
+            function maxY() {
+                var doc = document.documentElement;
+                return Math.max(0, doc.scrollHeight - window.innerHeight);
+            }
+
+            document.addEventListener('touchstart', function () { touchActive = true; }, { passive: true, capture: true });
+            document.addEventListener('touchend', function () { touchActive = false; }, { passive: true, capture: true });
+            document.addEventListener('touchcancel', function () { touchActive = false; }, { passive: true, capture: true });
+
+            window.addEventListener('scroll', function () {
+                var y = scrollY();
+                var max = maxY();
+                var limit = window.innerHeight * LIMIT_RATIO;
+
+                // жёсткий предел: за лимитом возвращаем прокрутку на границу
+                if (!clamped && (y < -limit || y > max + limit)) {
+                    clamped = true;
+                    window.scrollTo(0, y < 0 ? 0 : max);
+                }
+                if (y >= 0 && y <= max) clamped = false;
+
+                // если после жеста страница осталась за концом — подтягиваем
+                clearTimeout(settleTimer);
+                settleTimer = setTimeout(function () {
+                    if (touchActive || clamped) return;
+                    var y2 = scrollY();
+                    var max2 = maxY();
+                    if (y2 < -1) window.scrollTo(0, 0);
+                    else if (y2 > max2 + 1) window.scrollTo(0, max2);
+                }, 350);
+            }, { passive: true });
+        })();
+
         // Счётчики посещений и загрузок: дедупликация по SHA256 на сервере (/api/track).
         (function () {
             var elVisits = document.getElementById('statVisits');
