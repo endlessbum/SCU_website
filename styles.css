@@ -44,6 +44,11 @@
     /* на синем hover-е иконки снова светлые */
     .btn-download:hover img { filter: brightness(0) invert(1); }
 }
+/* overscroll-behavior:none у корня гасит нативный упругий overscroll документа:
+   в Safari 26 (Liquid Glass) «резинка» уводит прокрутку за реальный конец
+   страницы — в бесконечную пустоту ниже футера. Амортизацию у краёв на
+   тач-устройствах вместо неё даёт app.js — кастомная «резинка» на touchmove
+   с жёстким пределом растяжения */
 html {
     margin: 0;
     padding: 0;
@@ -51,6 +56,7 @@ html {
     color: var(--text);
     overflow-x: hidden;
     overflow-x: clip;
+    overscroll-behavior-y: none;
 }
 /* без overflow-x на body: вместе с видимым overflow-y он делает body
    самостоятельным scroll-контейнером, что провоцирует баги прокрутки

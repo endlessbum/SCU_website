@@ -479,52 +479,99 @@
             })();
         })();
 
-        // Страховка упругого overscroll: в Safari 26 (Liquid Glass) «резинка»
-        // у корневого скролла не имеет жёсткого предела — жест с инерцией
-        // уносит прокрутку далеко за реальный конец страницы. Гасить
-        // overscroll-behavior целиком нельзя (нужна амортизация у краёв),
-        // поэтому ограничиваем амплитуду: пока смещение за границей меньше
-        // лимита, нативная резинка работает как обычно; за лимитом прокрутка
-        // возвращается на границу, а застрявшая после жеста — подтягивается
-        // к границе по его окончании.
+        // Кастомная «резинка» у краёв страницы на тач-устройствах. Нативный
+        // упругий overscroll в Safari 26 (Liquid Glass) уводит прокрутку за
+        // реальный конец документа (поэтому у html гасится overscroll-behavior),
+        // а амортизацию даёт этот блок: пока страница у границы, продолжающийся
+        // вертикальный жест растягивает body с нарастающим сопротивлением,
+        // по отпусканию — пружинит обратно. Растяжение асимптотически
+        // ограничено высотой экрана, «в бесконечность» уйти нельзя.
+        // Инерционный бросок о границу останавливается жёстко — как в Chrome
+        // на Android; резинка работает только при удержании пальца.
         (function () {
-            var LIMIT_RATIO = 0.75; // больше любого нативного растяжения резинки
-            var touchActive = false;
-            var settleTimer = null;
-            var clamped = false;
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var tracking = false;   // жест обрабатывается резинкой
+            var prevX = 0, prevY = 0;
+            var drag = 0;           // суммарный «неограниченный» перетяг за границу
+            var stretch = 0;        // текущее визуальное растяжение (px)
+            var releaseTimer = null;
 
             function scrollY() { return window.scrollY || window.pageYOffset || 0; }
             function maxY() {
                 var doc = document.documentElement;
                 return Math.max(0, doc.scrollHeight - window.innerHeight);
             }
+            // iOS-кривая: смещение растёт всё медленнее и стремится к dim
+            function rubber(d, dim) { return (1 - 1 / (d / dim + 1)) * dim; }
 
-            document.addEventListener('touchstart', function () { touchActive = true; }, { passive: true, capture: true });
-            document.addEventListener('touchend', function () { touchActive = false; }, { passive: true, capture: true });
-            document.addEventListener('touchcancel', function () { touchActive = false; }, { passive: true, capture: true });
-
-            window.addEventListener('scroll', function () {
-                var y = scrollY();
-                var max = maxY();
-                var limit = window.innerHeight * LIMIT_RATIO;
-
-                // жёсткий предел: за лимитом возвращаем прокрутку на границу
-                if (!clamped && (y < -limit || y > max + limit)) {
-                    clamped = true;
-                    window.scrollTo(0, y < 0 ? 0 : max);
+            function release() {
+                if (!tracking) return;
+                tracking = false;
+                if (!stretch) return;
+                if (reduceMotion) {
+                    stretch = 0;
+                    document.body.style.transform = '';
+                    return;
                 }
-                if (y >= 0 && y <= max) clamped = false;
+                document.body.style.transition = 'transform .45s cubic-bezier(.22, 1, .36, 1)';
+                document.body.style.transform = 'translateY(0)';
+                releaseTimer = setTimeout(function () {
+                    document.body.style.transition = '';
+                    document.body.style.transform = '';
+                    stretch = 0;
+                    drag = 0;
+                }, 460);
+            }
 
-                // если после жеста страница осталась за концом — подтягиваем
-                clearTimeout(settleTimer);
-                settleTimer = setTimeout(function () {
-                    if (touchActive || clamped) return;
-                    var y2 = scrollY();
-                    var max2 = maxY();
-                    if (y2 < -1) window.scrollTo(0, 0);
-                    else if (y2 > max2 + 1) window.scrollTo(0, max2);
-                }, 350);
-            }, { passive: true });
+            document.addEventListener('touchstart', function (e) {
+                clearTimeout(releaseTimer);
+                document.body.style.transition = '';
+                document.body.style.transform = '';
+                tracking = false;
+                stretch = 0;
+                drag = 0;
+                if (e.touches.length !== 1 || document.body.classList.contains('panel-open')) return;
+                prevX = e.touches[0].clientX;
+                prevY = e.touches[0].clientY;
+            }, { passive: true, capture: true });
+
+            document.addEventListener('touchmove', function (e) {
+                if (e.touches.length !== 1 || document.body.classList.contains('panel-open')) return;
+                var x = e.touches[0].clientX;
+                var y = e.touches[0].clientY;
+                var dx = x - prevX;
+                var dy = y - prevY;
+                prevX = x;
+                prevY = y;
+
+                var atTop = scrollY() <= 0;
+                var atBottom = scrollY() >= maxY();
+
+                if (!tracking) {
+                    if (!atTop && !atBottom) return;
+                    if (Math.abs(dy) < 2 || Math.abs(dy) <= Math.abs(dx)) return;
+                    // жест внутрь страницы — обычный скролл, не резинка
+                    if ((atTop && dy < 0) || (atBottom && dy > 0)) return;
+                    tracking = true;
+                }
+
+                drag += dy;
+                var beyond = atTop ? drag > 0 : drag < 0;
+                if (!beyond) {
+                    // обратный жест выбрал растяжение — возвращаем нативный скролл
+                    stretch = 0;
+                    document.body.style.transform = '';
+                    tracking = false;
+                    return;
+                }
+
+                e.preventDefault();
+                stretch = (atTop ? 1 : -1) * rubber(Math.abs(drag), window.innerHeight);
+                document.body.style.transform = 'translateY(' + stretch.toFixed(2) + 'px)';
+            }, { passive: false, capture: true });
+
+            document.addEventListener('touchend', release, { passive: true, capture: true });
+            document.addEventListener('touchcancel', release, { passive: true, capture: true });
         })();
 
         // Счётчики посещений и загрузок: дедупликация по SHA256 на сервере (/api/track).
