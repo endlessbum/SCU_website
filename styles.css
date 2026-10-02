@@ -44,23 +44,22 @@
     /* на синем hover-е иконки снова светлые */
     .btn-download:hover img { filter: brightness(0) invert(1); }
 }
-/* overscroll-behavior:none у корня гасит нативный упругий overscroll документа:
-   в Safari 26 (Liquid Glass) «резинка» уводит прокрутку за реальный конец
-   страницы — в бесконечную пустоту ниже футера. Амортизацию у краёв на
-   тач-устройствах вместо неё даёт app.js — кастомная «резинка» на touchmove
-   с жёстким пределом растяжения */
+/* У корня нет ни overflow, ни overscroll-behavior: прокрутка должна вести
+   себя как на служебных страницах (privacy, 404) — нативный упругий
+   overscroll у краёв и pull-to-refresh в мобильных браузерах. Свойства
+   прокрутки на корневом элементе как раз и ломали это поведение в Safari 26.
+   Горизонталь кадрируется на месте: у .gallery, .hero-image и .btn-roll
+   свои overflow:hidden, а скрытые панели выезжают за ЛЕВЫЙ край экрана —
+   отрицательное переполнение горизонтального скролла не создаёт */
 html {
     margin: 0;
     padding: 0;
     background: var(--bg);
     color: var(--text);
-    overflow-x: hidden;
-    overflow-x: clip;
-    overscroll-behavior-y: none;
 }
-/* без overflow-x на body: вместе с видимым overflow-y он делает body
+/* без overflow на body: с видимым overflow у html он сделал бы body
    самостоятельным scroll-контейнером, что провоцирует баги прокрутки
-   в iOS; горизонталь и так обрезается clip у html */
+   в iOS */
 body {
     margin: 0;
     padding: 0;
