@@ -4,6 +4,9 @@
    @media (prefers-color-scheme: dark) ниже; тёмная тема включается
    автоматически по системной настройке, без переключателя */
 :root {
+    /* в тёмной теме браузер красит в тёмное скроллбары и страницы,
+       и панелей «Версии» (как на privacy и 404) */
+    color-scheme: light dark;
     --bg: #fff;
     --text: #000;
     --text-strong: #444444;
@@ -41,9 +44,6 @@
     /* на синем hover-е иконки снова светлые */
     .btn-download:hover img { filter: brightness(0) invert(1); }
 }
-/* overscroll-behavior:none у корня гасит упругий overscroll документа:
-   в Safari 26 (Liquid Glass) «резинка» уносит прокрутку за реальный конец
-   страницы — в белую пустоту ниже футера */
 html {
     margin: 0;
     padding: 0;
@@ -51,7 +51,6 @@ html {
     color: var(--text);
     overflow-x: hidden;
     overflow-x: clip;
-    overscroll-behavior-y: none;
 }
 /* без overflow-x на body: вместе с видимым overflow-y он делает body
    самостоятельным scroll-контейнером, что провоцирует баги прокрутки
@@ -590,6 +589,26 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
 @keyframes carousel {
     from { transform: translate3d(0, 0, 0); }
     to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* ---------- SCROLLBAR (десктоп) ---------- */
+/* Нативная полоса скрыта целиком: вместо неё to-top.js рисует при прокрутке
+   оверлейный бегунок .scroll-thumb (#2B2B2B, без стрелок и фона), который
+   гаснет в покое — как оверлейные полосы на тач-устройствах */
+@media (hover: hover) and (pointer: fine) {
+    html { scrollbar-width: none; }
+    ::-webkit-scrollbar { width: 0; height: 0; }
+    .scroll-thumb {
+        position: fixed;
+        width: 8px;
+        border-radius: 999px;
+        background: #2B2B2B;
+        opacity: 0;
+        transition: opacity .25s ease;
+        pointer-events: none;
+        z-index: 100;
+    }
+    .scroll-thumb.visible { opacity: 1; }
 }
 
 /* ---------- SCROLL TO TOP ---------- */

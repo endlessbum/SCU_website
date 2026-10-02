@@ -102,6 +102,25 @@
             .btn-github img { filter: invert(1); }
         }
 
+        /* ---------- SCROLLBAR (десктоп) ---------- */
+        /* Нативная полоса скрыта: to-top.js рисует при прокрутке оверлейный
+           бегунок .scroll-thumb, гаснущий в покое (как на тач-устройствах) */
+        @media (hover: hover) and (pointer: fine) {
+            html { scrollbar-width: none; }
+            ::-webkit-scrollbar { width: 0; height: 0; }
+            .scroll-thumb {
+                position: fixed;
+                width: 8px;
+                border-radius: 999px;
+                background: #2B2B2B;
+                opacity: 0;
+                transition: opacity .25s ease;
+                pointer-events: none;
+                z-index: 100;
+            }
+            .scroll-thumb.visible { opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .logo { width: 72px; height: 72px; }
             .code { font-size: 72px; }
@@ -119,5 +138,6 @@
         <a class="btn btn-get" href="https://github.com/endlessbum/SCU/releases/download/v3.1.1/SCU_Setup_3.1.1.exe"><img src="/static/compositor/windows-logo.svg" alt="">Скачать</a>
         <a class="btn btn-github" href="https://github.com/endlessbum/SCU" target="_blank" rel="noopener"><img src="/static/compositor/github-logo.svg" alt="">GitHub</a>
     </div>
+    <script src="to-top.js" defer></script>
 </body>
 </html>

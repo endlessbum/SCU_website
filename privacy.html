@@ -106,6 +106,25 @@
             .to-top:hover { background: #1C5FF6; color: #fff; }
         }
 
+        /* ---------- SCROLLBAR (десктоп) ---------- */
+        /* Нативная полоса скрыта: to-top.js рисует при прокрутке оверлейный
+           бегунок .scroll-thumb, гаснущий в покое (как на тач-устройствах) */
+        @media (hover: hover) and (pointer: fine) {
+            html { scrollbar-width: none; }
+            ::-webkit-scrollbar { width: 0; height: 0; }
+            .scroll-thumb {
+                position: fixed;
+                width: 8px;
+                border-radius: 999px;
+                background: #2B2B2B;
+                opacity: 0;
+                transition: opacity .25s ease;
+                pointer-events: none;
+                z-index: 100;
+            }
+            .scroll-thumb.visible { opacity: 1; }
+        }
+
         .to-top {
             position: fixed;
             right: 25px;
