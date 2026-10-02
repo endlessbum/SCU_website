@@ -525,6 +525,7 @@
 
             document.addEventListener('touchstart', function (e) {
                 clearTimeout(releaseTimer);
+                cancelMomentumAnim();
                 document.body.style.transition = '';
                 document.body.style.transform = '';
                 tracking = false;
@@ -572,6 +573,56 @@
 
             document.addEventListener('touchend', release, { passive: true, capture: true });
             document.addEventListener('touchcancel', release, { passive: true, capture: true });
+
+            // Инерционный бросок: после отпускания пальца touch-события не
+            // приходят, поэтому момент достижения границы ловим по скорости
+            // скролла. Если страница «влетела» в край с большой скоростью —
+            // запускаем отскок: растяжение от остаточной скорости (с тем же
+            // асимптотическим пределом), затем пружина обратно. Медленная
+            // прокрутка (в том числе плавный scrollTo к кнопке «наверх»)
+            // останавливается без отскока.
+            var samples = [];        // последние замеры [t, y] за ~80 мс
+            var momentumAnim = null;
+
+            function cancelMomentumAnim() {
+                if (momentumAnim) {
+                    momentumAnim.cancel();
+                    momentumAnim = null;
+                }
+            }
+
+            window.addEventListener('scroll', function () {
+                if (reduceMotion || tracking || document.body.classList.contains('panel-open')) return;
+                var now = performance.now();
+                var y = scrollY();
+                samples.push([now, y]);
+                while (samples.length > 6 || (samples.length > 2 && now - samples[0][0] > 80)) samples.shift();
+                if (samples.length < 2) return;
+                var dt = now - samples[0][0];
+                if (dt <= 0) return;
+                var v = (y - samples[0][1]) / dt; // px/ms: вниз — положительная
+
+                var max = maxY();
+                var hittingTop = y <= 0 && v < -0.5;
+                var hittingBottom = y >= max && v > 0.5;
+                if (!hittingTop && !hittingBottom) return;
+
+                var dim = window.innerHeight;
+                var amplitude = Math.min(rubber(Math.abs(v) * 150, dim), dim * 0.35);
+                var sign = hittingTop ? 1 : -1; // у верха тянем вниз, у низа — вверх
+                cancelMomentumAnim();
+                momentumAnim = document.body.animate([
+                    { transform: 'translateY(0px)', easing: 'cubic-bezier(.17, .67, .35, 1)' },
+                    { transform: 'translateY(' + (sign * amplitude).toFixed(2) + 'px)', easing: 'cubic-bezier(.22, 1, .36, 1)' },
+                    { transform: 'translateY(0px)' }
+                ], { duration: 650 });
+                momentumAnim.onfinish = function () {
+                    // cancel() обязателен: пока эффект анимации применён,
+                    // body остаётся containing block для position:fixed
+                    this.cancel();
+                    momentumAnim = null;
+                };
+            }, { passive: true });
         })();
 
         // Счётчики посещений и загрузок: дедупликация по SHA256 на сервере (/api/track).
