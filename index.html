@@ -115,44 +115,310 @@
                 <p>Приложение бесплатное, работает на современном .NET и открыто для доработок. Вы можете взять исходный код, убрать ненужные разделы, добавить свои сценарии или просто пользоваться готовым инструментом, который делает систему быстрее, чище и экономит ваше время.</p>
             </div>
 
-            <ul class="features">
-                <li class="sub">Главная</li>
-
-                <li class="group">Обзор</li>
-                <li class="sub">Бэнчмарк</li>
-                <li class="sub">Информация о системе</li>
-
-                <li class="group">Очистка и обслуживание</li>
-                <li class="sub">Очистка системы и диска</li>
-                <li class="sub">Удаление мусорного ПО</li>
-                <li class="sub">Поиск и целостность</li>
-                <li class="sub">Установка компонентов</li>
-                <li class="sub">Устранение неполадок</li>
-
-                <li class="group">Приватность и защита</li>
-                <li class="sub">Приватность и телеметрия</li>
-                <li class="sub">UAC</li>
-                <li class="sub">Сканер</li>
-
-                <li class="group">Система Windows</li>
-                <li class="sub">Службы Windows</li>
-                <li class="sub">Приложения</li>
-                <li class="sub">Автозагрузка</li>
-                <li class="sub">Задачи планировщика</li>
-                <li class="sub">Обновления Windows</li>
-                <li class="sub">Драйверы</li>
-
-                <li class="group">Поведение и производительность</li>
-                <li class="sub">Питание, память и CPU</li>
-                <li class="sub">Сеть</li>
-                <li class="sub">Интерфейс и проводник</li>
-                <li class="sub">Ввод, браузер и игры</li>
-
-                <li class="group">Приложение</li>
-                <li class="sub">Браузер</li>
-                <li class="sub">AI</li>
-                <li class="sub">История</li>
-                <li class="sub">Настройки</li>
+            <ul class="features tree">
+                <li>
+                    <details class="tree-group">
+                        <summary>Вне категорий <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                        <ul class="tree-tabs">
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Главная <span class="tree-view">DashboardView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Поиск утилит» (поле с подсказками)</li>
+                                        <li>Выключатель пакета «Применить оптимизацию» с expander «Настройка списка» (карточка на каждую группу утилит)</li>
+                                        <li>Блок «Закреплённые карточки» (дубликаты карточек разделов)</li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details class="tree-group">
+                        <summary>Обзор <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                        <ul class="tree-tabs">
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Информация о системе <span class="tree-view">InfoView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Сводка о системе»</li>
+                                        <li>«Логические диски» (SubCard на каждый диск)</li>
+                                        <li>«Видеоадаптеры»</li>
+                                        <li>«Сетевые адаптеры» (+ условная карточка ошибки)</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Бэнчмарк <span class="tree-view">BenchmarkView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Индекс состояния»</li>
+                                        <li>«До и после изменений»</li>
+                                        <li>«Тренд индекса по проверкам»</li>
+                                        <li>«Категории»</li>
+                                        <li>«Что может улучшить SCU» (2 варианта карточки)</li>
+                                        <li>«Детальные метрики» (5 из 6 карточек условные — по наличию результата)</li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details class="tree-group">
+                        <summary>Очистка и обслуживание <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                        <ul class="tree-tabs">
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Очистка системы и диска <span class="tree-view">CleanupView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Корзина»</li>
+                                        <li>«Папки Temp»</li>
+                                        <li>«Кэш браузеров»</li>
+                                        <li>«Кэш загрузок обновлений Windows»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Установка компонентов <span class="tree-view">ComponentsView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Одна карточка-список: DirectX / VC++ / .NET, строка на компонент</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Удаление мусорного ПО <span class="tree-view">BloatView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Одна карточка-список AppX-пакетов (строка-карточка на каждый пакет)</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Поиск и целостность <span class="tree-view">MaintenanceView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Индексация поиска»</li>
+                                        <li>«Проверка целостности» (maint.integrity)</li>
+                                        <li>«Точки восстановления»</li>
+                                        <li>«Хранилище компонентов (WinSxS)» (maint.winsxs)</li>
+                                        <li>«Служебные кэши и сжатие»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Устранение неполадок <span class="tree-view">TroubleshootingView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Сводка последнего запуска</li>
+                                        <li>Динамические карточки находок (по тяжести)</li>
+                                        <li>Expander «Пропущенные»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details class="tree-group">
+                        <summary>Приватность и защита <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                        <ul class="tree-tabs">
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Приватность и телеметрия <span class="tree-view">PrivacyView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Телеметрия и реклама»</li>
+                                        <li>«Уведомления и советы»</li>
+                                        <li>«Фоновые UWP-приложения»</li>
+                                        <li>«Windows Copilot AI»</li>
+                                        <li>«Оптимизация доставки»</li>
+                                        <li>«Планировщик: телеметрия / CEIP»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>UAC <span class="tree-view">SecurityView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Контроль учётных записей (UAC)»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Сканер <span class="tree-view">ScannerView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Drop-зона «Перетащите файл или папку сюда»</li>
+                                        <li>«Сканирование файла или папки»</li>
+                                        <li>Динамические карточки обнаружений</li>
+                                        <li>«Карантин»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details class="tree-group">
+                        <summary>Система Windows <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                        <ul class="tree-tabs">
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Службы Windows <span class="tree-view">ServicesView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Динамические карточки по списку SVCLIST</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Приложения <span class="tree-view">AppsView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Поиск + карточка на каждое приложение с кнопкой «Удалить»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Автозагрузка <span class="tree-view">StartupView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Динамические карточки записей автозагрузки</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Задачи планировщика <span class="tree-view">TasksView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Динамические карточки задач</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Обновления Windows <span class="tree-view">UpdateView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Службы обновления» (update.services)</li>
+                                        <li>«Пауза обновлений» (update.pause)</li>
+                                        <li>«Драйверы через Windows Update»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Драйверы <span class="tree-view">DriversView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Состояние драйверов» (drivers.state)</li>
+                                        <li>«Обновления драйверов»</li>
+                                        <li>«Устройства и драйверы» (условная)</li>
+                                        <li>«Проблемные устройства» (условная)</li>
+                                        <li>«Безопасность»</li>
+                                        <li>«Резервная копия драйверов»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details class="tree-group">
+                        <summary>Поведение и производительность <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                        <ul class="tree-tabs">
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Питание, память и CPU <span class="tree-view">PowerView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Гибернация и быстрый запуск»</li>
+                                        <li>«Память и файловая система» (сжатие памяти, SysMain, имена 8.3, время последнего доступа, Prefetcher)</li>
+                                        <li>«Файл подкачки»</li>
+                                        <li>«Ограничения CPU и ОЗУ (bcdedit)»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Сеть <span class="tree-view">NetworkView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Профиль для игр» (net.gaming)</li>
+                                        <li>«Профиль сетевого адаптера»</li>
+                                        <li>«TCP Global (netsh int tcp)» (net.tcp)</li>
+                                        <li>«MTU интерфейсов» (net.mtu)</li>
+                                        <li>«QoS-политика» (net.qos)</li>
+                                        <li>«NetBIOS over TCP/IP» (net.netbios)</li>
+                                        <li>«DNS» (net.dns)</li>
+                                        <li>«Сертификат Минцифры»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Интерфейс и проводник <span class="tree-view">UIView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>SwitchRowCard на тумблер, три группы-заголовка внутри</li>
+                                        <li>«Проводник» — 14 тумблеров: «Этот компьютер», кнопки «Главная»/«Галерея»/«Сеть», Корзина в навигации и на рабочем столе, компактный вид, недавние файлы, классическое контекстное меню, расширения файлов, скрытые файлы, полный путь, флажки элементов, OneDrive</li>
+                                        <li>«Визуальные эффекты» — 4: анимации окон, прозрачность, эскизы вместо значков, тени и выделение</li>
+                                        <li>«Меню "Пуск"» — 1: раздел «Рекомендуем»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Ввод, браузер и игры <span class="tree-view">InputView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Ускорение мыши»</li>
+                                        <li>«Залипание клавиш»</li>
+                                        <li>«Ускорение запуска Edge»</li>
+                                        <li>«Game Bar»</li>
+                                        <li>«Фоновая запись и DVR»</li>
+                                        <li>«Game Mode» (id закрепления input.&lt;rowId&gt;)</li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+                <li>
+                    <details class="tree-group">
+                        <summary>Приложение <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                        <ul class="tree-tabs">
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Браузер <span class="tree-view">BrowserView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>3 взаимоисключающие условные карточки: «SCU браузер» / «Компонент браузера не установлен» / «Браузер запущен»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>AI <span class="tree-view">DeepSeekView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>«Подключение по API»</li>
+                                        <li>«Чат»</li>
+                                        <li>«AI-помощник SCU» (ai.assistant)</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>История <span class="tree-view">HistoryView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>Фильтр по категориям + одна карточка-список событий по дням</li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li>
+                                <details class="tree-tab">
+                                    <summary>Настройки <span class="tree-view">SettingsView</span> <span class="icon icon-arrow-right toggle-arrow" aria-hidden="true"></span></summary>
+                                    <ul class="tree-cards">
+                                        <li>14 карточек: «Тема оформления», «Гамма интерфейса», «Акцентный цвет», «Цвет иконки приложения», «Язык интерфейса», «Журнал», «UAC», «Горячие клавиши», «Добавить свой скрипт» (settings.addscript), «Редактирование меню», «Знакомство с приложением», «Бэкапы», «Обновления SCU», «О приложении»</li>
+                                    </ul>
+                                </details>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
             </ul>
         </div>
     </section>

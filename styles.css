@@ -274,28 +274,87 @@ a { color: inherit; text-decoration: none; }
 }
 .copy p:last-child { margin-bottom: 0; }
 
+/* ---------- Дерево меню (категория → вкладка → карточки) ---------- */
 .features {
     list-style: none;
     margin: 50px 0 0;
     padding: 0;
-    max-width: 420px;
+    max-width: 460px;
 }
-.features li {
+.features li { margin: 0; padding: 0; }
+.features details { display: block; }
+.features summary {
     display: flex;
     align-items: center;
-    height: 42px;
-    padding-left: 11px;
+    gap: 6px;
+    min-height: 42px;
+    padding: 0 8px 0 11px;
     font-size: 14px;
     border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    transition: background-color .15s ease;
 }
-.features li:last-child { border-bottom: 0; }
-.features .group {
+.features summary::-webkit-details-marker { display: none; }
+.features summary:hover { background: var(--hover-wash); }
+.features summary:focus-visible {
+    outline: 2px solid #1C5FF6;
+    outline-offset: -2px;
+}
+/* стрелка уровня: закрыто → вправо, открыто → вниз */
+.features .toggle-arrow { margin-left: auto; flex: none; }
+.features details[open] > summary .toggle-arrow { transform: rotate(90deg); }
+
+/* уровень 1 — категории */
+.features > li > details > summary {
     color: var(--text-strong);
     font-weight: 600;
 }
-.features .sub {
-    color: var(--text);
+
+/* уровень 2 — вкладки + техническое имя view */
+.tree-tabs { list-style: none; margin: 0; padding: 0; }
+.tree-tabs > li > details > summary {
     padding-left: 27px;
+    color: var(--text);
+    font-weight: 400;
+}
+.tree-view {
+    font-size: 11px;
+    line-height: 15px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: var(--code-bg);
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* уровень 3 — карточки вкладки */
+.tree-cards {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0 8px 43px;
+}
+.tree-cards li {
+    display: flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 4px 8px 4px 0;
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--text-secondary);
+    border-bottom: 1px dashed var(--border);
+}
+.tree-cards li:last-child { border-bottom: 0; }
+
+/* содержимое раскрывается с лёгким сдвигом */
+@keyframes tree-open {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+}
+.features details[open] > .tree-tabs,
+.tree-tabs details[open] > .tree-cards {
+    animation: tree-open .25s ease;
 }
 
 /* ---------- FOOTER ---------- */
@@ -547,8 +606,9 @@ body.panel-open > :not(.versions-overlay):not(.side-panel) {
     .copy { max-width: none; margin-top: 21px; }
     .copy p { font-size: 14px; line-height: 20px; margin-bottom: 20px; }
     .features { margin-top: 40px; max-width: none; }
-    .features li { height: 44px; font-size: 14px; padding-left: 8px; }
-    .features .sub { padding-left: 23px; }
+    .features summary { min-height: 44px; padding-left: 8px; }
+    .tree-tabs > li > details > summary { padding-left: 23px; }
+    .tree-cards { padding-left: 39px; }
     .footer { flex-direction: column; padding: 60px 25px 80px; }
     .footer-brand { flex-direction: column; gap: 14px; }
     .footer-brand img { width: 81px; height: 81px; }
