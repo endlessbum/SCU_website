@@ -19,7 +19,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/static/compositor/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1F1F1F">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#202020">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -61,7 +61,10 @@
         </div>
 
         <div class="hero-image">
-            <img src="static/compositor/hero.webp" width="1169" height="912" fetchpriority="high" alt="Интерфейс приложения SCU">
+            <picture>
+                <source media="(max-width: 768px)" srcset="static/compositor/hero-mobile.webp?v=2" width="1170" height="913">
+                <img src="static/compositor/hero.webp?v=2" width="2936" height="1443" fetchpriority="high" alt="Интерфейс приложения SCU">
+            </picture>
         </div>
     </header>
 
