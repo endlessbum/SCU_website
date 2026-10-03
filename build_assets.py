@@ -5,21 +5,22 @@ import shutil
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-STRAIGHT = os.path.join(ROOT, 'Скрины', 'Срины приложения с углами 90 градусов')
+STRAIGHT = os.path.join(ROOT, 'static', 'scuapp', 'Заменить')
 SCU = os.path.join(ROOT, 'static', 'scuapp')
 
 straight_files = ({f: os.path.join(STRAIGHT, f)
                    for f in os.listdir(STRAIGHT) if f.lower().endswith('.png')}
                   if os.path.isdir(STRAIGHT) else {})
 
-# --- 1. Скрины для карусели (прямые углы), имена прежние ---
-# рядом с png сохраняется webp: разметка подключает его через <picture>,
-# png остаётся fallback'ом. Папка с исходниками опциональна: без неё
-# существующие скрины карусели не пересобираются
+# --- 1. Скрины для карусели, имена прежние ---
+# png копируется как есть, webp пережимается (lossless-экспорт композера
+# весит ~1.3 МБ). Папка с исходниками опциональна: без неё существующие
+# скрины карусели не пересобираются
 for src_name, dst_name in [
-    ('Установка компонентов.png', 'screen-install.png'),
-    ('Удаление мусорного ПО.png', 'screen-cleanup.png'),
-    ('Питание, память, CPU.png', 'screen-power.png'),
+    ('1. screen-benchmark.png', 'screen-benchmark.png'),
+    ('2. screen-search.png', 'screen-search.png'),
+    ('3. screen-telemetry.png', 'screen-telemetry.png'),
+    ('4. screen-power.png', 'screen-power.png'),
 ]:
     if src_name not in straight_files:
         continue
