@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Сборка ассетов сайта: скрины карусели, hero-коллаж и og:image."""
+"""Сборка ассетов сайта: скрины карусели и hero-коллаж."""
 import os
 import shutil
-from PIL import Image, ImageFilter, ImageOps
+from PIL import Image, ImageFilter
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ROUND = os.path.join(ROOT, 'Скрины', 'Срины приложения с сглаженными углами')
@@ -66,11 +66,7 @@ rgb = canvas.convert('RGB')
 rgb.save(os.path.join(ROOT, 'static', 'compositor', 'hero.webp'),
          'WEBP', quality=90, method=6)
 
-# --- 3. og:image 1200x630 — cover-кроп из hero ---
-ImageOps.fit(rgb, (1200, 630), Image.LANCZOS).save(
-    os.path.join(ROOT, 'static', 'compositor', 'og-image.png'), optimize=True)
-
-# --- 4. Курсор-шестерёнка: плоский #1C60F6, альфа логотипа, без контура ---
+# --- 3. Курсор-шестерёнка: плоский #1C60F6, альфа логотипа, без контура ---
 icon = Image.open(os.path.join(ROOT, 'static', 'compositor', 'app-icon.png')).convert('RGBA')
 gear = Image.new('RGBA', icon.size, (0x1C, 0x60, 0xF6, 0))
 gear.putalpha(icon.split()[3])
