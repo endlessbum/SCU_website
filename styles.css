@@ -24,11 +24,11 @@
 }
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg: #202020;
+        --bg: #1F1F1F;
         --text: #f5f5f5;
         --text-strong: #e3e3e3;
         --text-secondary: #9a9a9a;
-        --surface: #202020;
+        --surface: #1F1F1F;
         --surface-raised: #2B2B2B;
         --panel-bg: rgba(35, 35, 37, .99);
         --hover-wash: #2a2a2c;
