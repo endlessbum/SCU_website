@@ -1,6 +1,7 @@
 node_modules/
 .vercel/
 .zcode/
+.workbuddy-ai/
 
 Итог/
 

@@ -465,8 +465,11 @@
             var changelogBody = document.getElementById('changelogBody');
             if (!toggle || !versions || !changelog || !versionsList) return;
 
-            function open(el) { el.classList.add('open'); el.setAttribute('aria-hidden', 'false'); }
-            function close(el) { el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); }
+            // inert на закрытой панели: её кнопки не попадают в tab-порядок и в
+            // дерево доступности, даже пока visibility не переключилась
+            // (переход .35s). Без него фокус мог уехать в скрытую панель.
+            function open(el) { el.classList.add('open'); el.setAttribute('aria-hidden', 'false'); el.inert = false; }
+            function close(el) { el.classList.remove('open'); el.setAttribute('aria-hidden', 'true'); el.inert = true; }
 
             // Пока открыта панель (список версий или описание), основная страница
             // не прокручивается — скролл работает только внутри самой панели.
@@ -760,20 +763,33 @@
             var elDownloads = document.getElementById('statDownloads');
 
             function render(data) {
-                if (!data || typeof data.visits !== 'number') return;
+                if (!data || typeof data.visits !== 'number') return false;
                 var visitsValue = elVisits.querySelector('.stat-value');
                 var downloadsValue = elDownloads.querySelector('.stat-value');
-                if (!visitsValue || !downloadsValue) return;
+                if (!visitsValue || !downloadsValue) return false;
                 visitsValue.textContent = data.visits.toLocaleString('ru-RU');
                 downloadsValue.textContent = data.downloads.toLocaleString('ru-RU');
                 elVisits.classList.add('visible');
                 elDownloads.classList.add('visible');
+                return true;
             }
 
-            fetch('api/track?type=visit', { headers: { 'Accept': 'application/json' } })
-                .then(function (r) { return r.ok ? r.json() : null; })
-                .then(render)
-                .catch(function () {});
+            // Одна повторная попытка через 8 с: сеть/лямбда могут отвалиться
+            // разово, и без ретрая счётчики висели бы на «—» до перезагрузки.
+            // Повтор безопасен: сервер дедуплицирует визит по хешу.
+            function loadStats(attempt) {
+                fetch('api/track?type=visit', { headers: { 'Accept': 'application/json' } })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (data) {
+                        if (render(data)) return;
+                        if (attempt === 0) setTimeout(function () { loadStats(1); }, 8000);
+                    })
+                    .catch(function () {
+                        if (attempt === 0) setTimeout(function () { loadStats(1); }, 8000);
+                    });
+            }
+
+            loadStats(0);
 
             // keepalive, чтобы запрос успел уйти до начала скачивания
             document.querySelectorAll('.btn-download').forEach(function (btn) {
