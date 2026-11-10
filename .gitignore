@@ -3,17 +3,12 @@ node_modules/
 .zcode/
 .workbuddy-ai/
 
-Итог/
-
-# Python (build_assets.py)
 __pycache__/
 *.pyc
 
-# Env / secrets
 .env
 .env.local
 
-# OS / editor junk
 .DS_Store
 Thumbs.db
 Desktop.ini
